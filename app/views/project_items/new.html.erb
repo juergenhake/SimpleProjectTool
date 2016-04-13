@@ -1,0 +1,50 @@
+<%= render partial: '/shared/header', locals: {section: @project.component.customer.name + " > " + @project.component.name + " > " + @project.title + " > Aufgabe anlegen", back: true} %>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h1 class="panel-title"> Aufgabe anlegen</h1>
+      </div>
+      <div class="panel-body">
+
+        <%= form_for @item, url: {action: "create"} do |f| %>
+            <%= f.hidden_field :project_id, value: @project.id %>
+            <div class="field">
+              <h5>
+               <%= f.label 'Aufgabe' %>
+              </h5>
+              <%= f.text_field :title, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Beschreibung' %>
+              </h5>
+              <%= f.text_field :description, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Verantwortlicher' %>
+              </h5>
+              <%= f.text_field :user, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Startdatum' %>
+              </h5>
+              <%= f.text_field :start, "data-provide" => 'datepicker', "data-date-format" => 'dd.mm.yyyy', class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Enddatum' %>
+              </h5>
+              <%= f.text_field :end, "data-provide" => 'datepicker', "data-date-format" => 'dd.mm.yyyy', class: 'form-control' %>
+            </div>
+
+            <br>
+            <br>
+            <%= f.submit "Erstellen", class: 'btn btn-primary' %>
+          <% end %><br>
+      </div>
+    </div>
+  </div>
+</div>

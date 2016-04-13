@@ -1,0 +1,31 @@
+<%= render partial: '/shared/header', locals: {section: @component.customer.name + " > " + @component.name + " > Projekt anlegen", back: true} %>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h1 class="panel-title"> Projekt anlegen</h1>
+      </div>
+      <div class="panel-body">
+
+        <%= form_for @project, url: {action: "create"} do |f| %>
+            <%= f.hidden_field :component_id, value: @component.id %>
+            <div class="field">
+              <h5>
+               <%= f.label 'Projekttitel' %>
+              </h5>
+              <%= f.text_field :title, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Projektbeschreibung' %>
+              </h5>
+              <%= f.text_field :description, class: 'form-control' %>
+            </div>
+            <br>
+            <br>
+            <%= f.submit "Erstellen", class: 'btn btn-primary' %>
+          <% end %><br>
+      </div>
+    </div>
+  </div>
+</div>

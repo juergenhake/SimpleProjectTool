@@ -1,0 +1,37 @@
+<%= render partial: '/shared/header', locals: {section: @customer.name + " ändern", back: true} %>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h1 class="panel-title"> Kunden anlegen</h1>
+      </div>
+      <div class="panel-body">
+
+        <%= form_for @customer, url: {action: "update"} do |f| %>
+
+            <div class="field">
+              <h5>
+               <%= f.label 'Kundennummer SAP' %>
+              </h5>
+              <%= f.text_field :customer_id_sap, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Kundenname' %>
+              </h5>
+              <%= f.text_field :name, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                <%= f.label 'Kundenbeschreibung' %>
+              </h5>
+              <%= f.text_field :description, class: 'form-control' %>
+            </div>
+            <br>
+            <br>
+            <%= f.submit "Änderung Speichern", class: 'btn btn-primary' %>
+          <% end %><br>
+      </div>
+    </div>
+  </div>
+</div>

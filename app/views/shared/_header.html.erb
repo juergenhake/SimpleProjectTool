@@ -1,0 +1,12 @@
+<div class="jumbotron">
+      <!-- Title -->
+  <% if back %>
+    <%= link_to :back, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zurück" do %>
+     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    <% end %>
+  <% end %>
+
+  <span class="project-description"><%= section %></span>
+</div>
+
+<%= render partial: '/shared/flash_message'%>

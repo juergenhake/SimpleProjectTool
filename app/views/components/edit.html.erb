@@ -1,0 +1,37 @@
+<%= render partial: '/shared/header', locals: {section: @customer.name + " > " + @component.name + " > Bauteil ändern", back: true} %>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h1 class="panel-title"> Bauteil ändern</h1>
+      </div>
+      <div class="panel-body">
+
+        <%= form_for @component, url: {action: "update"} do |f| %>
+            <%= f.hidden_field :customer_id, value: @customer.id %>
+            <div class="field">
+              <h5>
+               <%= f.label 'Bauteilenummer SAP' %>
+              </h5>
+              <%= f.text_field :component_id_sap, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Bauteilbezeichnung' %>
+              </h5>
+              <%= f.text_field :name, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                <%= f.label 'Bauteilbeschreibung' %>
+              </h5>
+              <%= f.text_field :description, class: 'form-control' %>
+            </div>
+            <br>
+            <br>
+            <%= f.submit "Bauteil ändern", class: 'btn btn-primary' %>
+          <% end %><br>
+      </div>
+    </div>
+  </div>
+</div>

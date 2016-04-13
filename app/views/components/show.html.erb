@@ -1,0 +1,31 @@
+<%= render partial: '/shared/flash_message'%>
+<div class="row">
+  <div class="col-md-6">
+    <h1>Alle Kunden</h1>
+  </div>
+  <div class="col-md-6">
+    <%= link_to new_customer_path do %>
+      <i class="glyphicon glyphicon-plus">add</i> Neuer Kunde
+    <% end %>
+  </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+      <table class="table table-hover">
+        <tr>
+          <th>#</th>
+          <th>Kundennummer SAP</th>
+          <th>Kundenname</th>
+          <th>Kundenbeschreibung</th>
+        </tr>
+        <% @customers.each do |customer| %>
+          <tr>
+            <td><%=customer.id%></td>
+            <td><%=customer.customer_id_sap%></td>
+            <td><%=customer.name%></td>
+            <td><%=customer.description%></td>
+          </tr>
+        <%end%>
+      </table>
+    </div>
+</div>
