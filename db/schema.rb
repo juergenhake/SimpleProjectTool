@@ -30,10 +30,12 @@ ActiveRecord::Schema.define(version: 20160413072051) do
     t.string   "customer_id_sap"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
-    t.integer  "components_id"
+    t.integer  "component_id"
+    t.integer  "projects_id"
   end
 
-  add_index "customers", ["components_id"], name: "index_customers_on_components_id"
+  add_index "customers", ["component_id"], name: "index_customers_on_component_id"
+  add_index "customers", ["projects_id"], name: "index_customers_on_projects_id"
 
   create_table "project_items", force: :cascade do |t|
     t.string   "title"
@@ -52,11 +54,13 @@ ActiveRecord::Schema.define(version: 20160413072051) do
   create_table "projects", force: :cascade do |t|
     t.string   "title"
     t.string   "description"
-    t.integer  "component_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "customer_id"
+    t.integer  "projectItem_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
   end
 
-  add_index "projects", ["component_id"], name: "index_projects_on_component_id"
+  add_index "projects", ["customer_id"], name: "index_projects_on_customer_id"
+  add_index "projects", ["projectItem_id"], name: "index_projects_on_projectItem_id"
 
 end

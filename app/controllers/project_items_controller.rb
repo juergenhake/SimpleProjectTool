@@ -1,5 +1,5 @@
 class ProjectItemsController < ApplicationController
-  before_action :find_item, only: [:edit, :destroy,:update]
+  before_action :find_item, only: [:edit, :destroy,:update, :finished, :show]
   before_action :find_project, only: [:new, :index, :edit, :destroy]
 
   def index
@@ -8,6 +8,7 @@ class ProjectItemsController < ApplicationController
   end
 
   def show
+    finished
   end
 
   def create
@@ -42,6 +43,15 @@ class ProjectItemsController < ApplicationController
 
   def update
     if @item.update(item_params)
+      redirect_to project_items_path(project: @item.project), notice: 'Aufgabe wurde erfolgreich aktualisiert.'
+    else
+      redirect_to project_items_path(project: @item.project), alert: 'Aufgabe wurde nicht aktualisiert.'
+    end
+  end
+
+  def finished
+    @item.finished = Time.now
+    if @item.save
       redirect_to project_items_path(project: @item.project), notice: 'Aufgabe wurde erfolgreich aktualisiert.'
     else
       redirect_to project_items_path(project: @item.project), alert: 'Aufgabe wurde nicht aktualisiert.'

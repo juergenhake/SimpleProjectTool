@@ -5,7 +5,8 @@ class CreateCustomers < ActiveRecord::Migration
       t.string :description
       t.string :customer_id_sap
       t.timestamps null: false
-      t.references :components, index: true
+      t.references :component, index: true
+      t.references :projects, index: true
     end
   end
 end

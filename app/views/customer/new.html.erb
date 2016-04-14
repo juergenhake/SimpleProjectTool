@@ -1,6 +1,6 @@
-<%= render partial: '/shared/header', locals: {section: 'Kunde anlegen', back: true} %>
+<%= render partial: '/shared/header', locals: {section: @component.name + " > Kunde anlegen", back: true} %>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 col-md-offset-3">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h1 class="panel-title"> Kunden anlegen</h1>
@@ -8,7 +8,7 @@
       <div class="panel-body">
 
         <%= form_for @customer, url: {action: "create"} do |f| %>
-
+           <%= f.hidden_field :component_id, value: @component.id %>
            <div class="field">
               <h5>
                <%= f.label 'Kundennummer SAP' %>

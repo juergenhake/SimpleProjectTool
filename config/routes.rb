@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   resources :components
   resources :project
   resources :project_items
-  root 'customer#index'
+  put '/project_items/:id', to: 'project_items#finished', as: 'finished_project_item'
+
+  root 'components#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,9 +1,9 @@
 class ProjectController < ApplicationController
   before_action :find_project, only: [:edit, :destroy,:update]
-  before_action :find_component, only: [:new, :index, :edit, :destroy]
+  before_action :find_customer, only: [:new, :index, :edit, :destroy]
 
   def index
-    @projects = @component.projects
+    @projects = @customer.projects
 
   end
 
@@ -12,15 +12,15 @@ class ProjectController < ApplicationController
 
   def create
     @project = Project.new(project_params)
-    @component = Component.find(project_params[:component_id])
+    @customer = Customer.find(project_params[:customer_id])
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to project_index_path(component: @component), success: 'Projekt wurde erfolgreich erstellt.' }
+        format.html { redirect_to project_index_path(customer: @customer), success: 'Projekt wurde erfolgreich erstellt.' }
         format.json { render :show, status: :created, location: @project }
       else
-        format.html { redirect_to project_index_path(component: @component), danger: 'Projekt wurde nicht erstellt' }
-        format.json { render json: @component.errors, status: :unprocessable_entity }
+        format.html { redirect_to project_index_path(customer: @customer), danger: 'Projekt wurde nicht erstellt' }
+        format.json { render json: @customer.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -28,7 +28,7 @@ class ProjectController < ApplicationController
   def destroy
     @project.destroy
     respond_to do |format|
-      format.html { redirect_to project_index_path(component: @component), success: 'Projekt wurde erfolgreich entfernt.' }
+      format.html { redirect_to project_index_path(customer: @customer), success: 'Projekt wurde erfolgreich entfernt.' }
       format.json { head :no_content }
     end
   end
@@ -42,23 +42,23 @@ class ProjectController < ApplicationController
 
   def update
     if @project.update(project_params)
-      redirect_to project_index_path(component: @project.component), notice: 'Projekt wurde erfolgreich aktualisiert.'
+      redirect_to project_index_path(customer: @project.customer), notice: 'Projekt wurde erfolgreich aktualisiert.'
     else
-      redirect_to project_index_path(component: @project.component), alert: 'Projekt wurde nicht aktualisiert.'
+      redirect_to project_index_path(customer: @project.customer), alert: 'Projekt wurde nicht aktualisiert.'
     end
   end
 
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :component_id)
+    params.require(:project).permit(:title, :description, :customer_id)
   end
 
   def find_project
     @project = Project.find(params[:id])
   end
 
-  def find_component
-    @component = Component.find(params[:component])
+  def find_customer
+    @customer = Customer.find(params[:customer])
   end
 end

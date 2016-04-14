@@ -1,3 +1,4 @@
 class Customer < ActiveRecord::Base
-  has_many :components, dependent: :destroy
+  belongs_to :component
+  has_many :projects, dependent: :destroy
 end

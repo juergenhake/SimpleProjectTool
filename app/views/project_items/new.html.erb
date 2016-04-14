@@ -1,6 +1,6 @@
-<%= render partial: '/shared/header', locals: {section: @project.component.customer.name + " > " + @project.component.name + " > " + @project.title + " > Aufgabe anlegen", back: true} %>
+<%= render partial: '/shared/header', locals: {section: @project.customer.component.name + " > " + @project.customer.name + " > " + @project.title + " > Aufgabe anlegen", back: true} %>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 col-md-offset-3">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h1 class="panel-title"> Aufgabe anlegen</h1>

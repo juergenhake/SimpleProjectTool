@@ -1,6 +1,6 @@
-<%= render partial: '/shared/header', locals: {section: @customer.name + " > " + @component.name + " > Bauteil ändern", back: true} %>
+<%= render partial: '/shared/header', locals: {section: @component.name + " > Bauteil ändern", back: true} %>
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-md-6 col-md-offset-3">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h1 class="panel-title"> Bauteil ändern</h1>
@@ -8,7 +8,6 @@
       <div class="panel-body">
 
         <%= form_for @component, url: {action: "update"} do |f| %>
-            <%= f.hidden_field :customer_id, value: @customer.id %>
             <div class="field">
               <h5>
                <%= f.label 'Bauteilenummer SAP' %>
