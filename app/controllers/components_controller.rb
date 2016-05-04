@@ -2,6 +2,7 @@ class ComponentsController < ApplicationController
   before_action :find_component, only: [:destroy, :update, :edit]
   def index
     @components = Component.all
+    @newComponent = Component.new
   end
 
   def show

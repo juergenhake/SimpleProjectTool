@@ -9,6 +9,7 @@ class CreateProjectItems < ActiveRecord::Migration
       t.string :user
       t.timestamps null: false
       t.references :project, index: true
+      t.references :user, index: true
     end
   end
 end

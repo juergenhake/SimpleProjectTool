@@ -15,6 +15,9 @@
       <%= link_to root_path, :class => "navbar-brand" do %>
        Jürgenhake
        <%end%>
+      <ul class="nav navbar-nav navbar-right">
+        <%= render partial: '/shared/userWidget'%>
+      </ul>
 
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

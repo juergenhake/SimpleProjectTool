@@ -1,9 +1,11 @@
 <%= render partial: '/shared/header', locals: {section: "Alle Bauteile", back: false} %>
+<%= render partial: '/components/modal/newComponent' %>
 <div class="row">
   <div class="col-md-12" align="right">
-    <%= link_to new_component_path, :class => "btn btn-primary", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Neues Bauteil anlegen"  do %>
-     Neues Bauteil
-    <% end %>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newComponent">
+      Neues Bauteil
+    </button>
   </div>
 </div>
 <br>

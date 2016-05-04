@@ -7,29 +7,7 @@
       </div>
       <div class="panel-body">
 
-        <%= form_for @component, url: {action: "create"} do |f| %>
-            <div class="field">
-              <h5>
-               <%= f.label 'Bauteilenummer SAP' %>
-              </h5>
-              <%= f.text_field :component_id_sap, class: 'form-control' %>
-            </div>
-            <div class="field">
-              <h5>
-                 <%= f.label 'Bauteilbezeichnung' %>
-              </h5>
-              <%= f.text_field :name, class: 'form-control' %>
-            </div>
-            <div class="field">
-              <h5>
-                <%= f.label 'Bauteilbeschreibung' %>
-              </h5>
-              <%= f.text_field :description, class: 'form-control' %>
-            </div>
-            <br>
-            <br>
-            <%= f.submit "Erstellen", class: 'btn btn-primary' %>
-          <% end %><br>
+
       </div>
     </div>
   </div>

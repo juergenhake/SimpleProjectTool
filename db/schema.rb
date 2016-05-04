@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413072051) do
+ActiveRecord::Schema.define(version: 20160504133253) do
 
   create_table "components", force: :cascade do |t|
     t.string   "component_id_sap"
@@ -47,9 +47,11 @@ ActiveRecord::Schema.define(version: 20160413072051) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "project_id"
+    t.integer  "user_id"
   end
 
   add_index "project_items", ["project_id"], name: "index_project_items_on_project_id"
+  add_index "project_items", ["user_id"], name: "index_project_items_on_user_id"
 
   create_table "projects", force: :cascade do |t|
     t.string   "title"
@@ -62,5 +64,27 @@ ActiveRecord::Schema.define(version: 20160413072051) do
 
   add_index "projects", ["customer_id"], name: "index_projects_on_customer_id"
   add_index "projects", ["projectItem_id"], name: "index_projects_on_projectItem_id"
+
+  create_table "users", force: :cascade do |t|
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",          default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.integer  "projectItem_id"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+    t.string   "first_name"
+    t.string   "last_name"
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["projectItem_id"], name: "index_users_on_projectItem_id"
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
 end

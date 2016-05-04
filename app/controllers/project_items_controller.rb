@@ -4,6 +4,7 @@ class ProjectItemsController < ApplicationController
 
   def index
     @items = @project.projectItems
+    @newitem = ProjectItem.new
 
   end
 
@@ -61,7 +62,7 @@ class ProjectItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:project_item).permit(:title, :description, :start, :end, :user, :project_id)
+    params.require(:project_item).permit(:title, :description, :start, :end, :user_id, :project_id)
   end
 
   def find_item
