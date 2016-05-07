@@ -1,8 +1,8 @@
-<%= render partial: '/components/modal/newHistory' %>
-<%= render partial: '/components/modal/newAttachment' %>
+<%= render partial: '/customer/modal/newHistory' %>
+<%= render partial: '/customer/modal/newAttachment' %>
 <%= render partial: '/shared/flash_message'%>
 <div class="page-header">
-  <h1>Bauteil <%= @component.id %>, <small><%= @component.name %></small></h1>
+  <h1>Kunde <%= @customer.id %>, <small><%= @customer.name %></small></h1>
 </div>
 
 <div class="page-header">
@@ -17,20 +17,20 @@
       <div class="col-md-3">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Bauteil-Details</h3>
+            <h3 class="panel-title">Kunde-Details</h3>
           </div>
           <table class="table table-hover">
             <tr>
-              <th>Bauteilnummer SAP</th>
+              <th>Kundennummer SAP</th>
             </tr>
             <tr>
-              <td><%=@component.component_id_sap%></td>
+              <td><%=@customer.customer_id_sap%></td>
             </tr>
             <tr>
-              <th>Bauteil-Beschreibung</th>
+              <th>Kunden-Beschreibung</th>
             </tr>
             <tr>
-              <td><%=@component.description%></td>
+              <td><%=@customer.description%></td>
             </tr>
           </table>
         </div>
@@ -39,30 +39,28 @@
       <div class="col-md-3">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Kunden welche das Bauteil nutzen</h3>
+            <h3 class="panel-title">Projekte zum Kunde</h3>
           </div>
-          <% if @customers.blank? %>
-            Keine Kunden gefunden!
+          <% if @projects.blank? %>
+            Keine Projekte gefunden!
           <% else %>
             <table class="table table-hover">
               <tr>
                 <th>#</th>
-                <th>Kundennummer SAP</th>
-                <th>Kundenname</th>
-                <th>Kundenbeschreibung</th>
+                <th>Title</th>
+                <th>Beschreibung</th>
               </tr>
-              <% @customers.each do |customer| %>
+              <% @projects.each do |project| %>
                   <tr>
-                    <td><%=customer.id%></td>
-                    <td><%=customer.customer_id_sap%></td>
-                    <td><%=customer.name%></td>
-                    <td><%=customer.description%></td>
+                    <td><%=project.id%></td>
+                    <td><%=project.title%></td>
+                    <td><%=project.description%></td>
                   </tr>
               <%end%>
             </table>
-            <% if @customers.count/10 > 1 %>
+            <% if @projects.count/10 > 1 %>
               <div class="panel-footer">
-                <%= will_paginate @customers, renderer: BootstrapPagination::Rails, :param_name => 'customerpage' %>
+                <%= will_paginate @projects, renderer: BootstrapPagination::Rails, :param_name => 'projectpage' %>
               </div>
             <% end %>
           <% end %>
@@ -72,7 +70,7 @@
       <div class="col-md-6">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title">Hochgeladene Dateien zum Bauteil</h3>
+            <h3 class="panel-title">Hochgeladene Dateien zum Kunden</h3>
           </div>
           <% if @files.blank? %>
               Keine Dateien gefunden!
@@ -118,11 +116,11 @@
             <h3 class="panel-title">Logbuch</h3>
           </div>
           <div class="panel-body fixed-panel">
-            <% if @component.historys.blank? %>
+            <% if @customer.historys.blank? %>
               Keine Kommentare gefunden!
             <% else %>
               <table class="table">
-                <% @component.historys.each do |history| %>
+                <% @customer.historys.each do |history| %>
                   <thead>
                     <tr>
                       <% if history.systemflag %>

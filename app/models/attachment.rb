@@ -10,6 +10,7 @@ class Attachment < ActiveRecord::Base
   belongs_to :projectItems
   belongs_to :user
 
+    self.per_page = 10
 
 end
 

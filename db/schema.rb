@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160507081027) do
+ActiveRecord::Schema.define(version: 20160507140045) do
 
   create_table "attachments", force: :cascade do |t|
     t.string   "file_file_name"
@@ -44,6 +44,14 @@ ActiveRecord::Schema.define(version: 20160507081027) do
   end
 
   add_index "components", ["customer_id"], name: "index_components_on_customer_id"
+
+  create_table "components_customers", force: :cascade do |t|
+    t.integer "customer_id"
+    t.integer "component_id"
+  end
+
+  add_index "components_customers", ["component_id"], name: "index_components_customers_on_component_id"
+  add_index "components_customers", ["customer_id"], name: "index_components_customers_on_customer_id"
 
   create_table "customers", force: :cascade do |t|
     t.string   "name"

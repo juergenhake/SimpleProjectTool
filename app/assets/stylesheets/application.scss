@@ -60,4 +60,11 @@ color: #262626;
 background-color: #F5F5F5;
 }
 
+.fixed-panel {
+  overflow-y: scroll;
+  height: 300px;
+  width: 100%;
+  position: absolute;
+}
+
 

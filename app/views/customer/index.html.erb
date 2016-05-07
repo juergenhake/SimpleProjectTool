@@ -1,10 +1,13 @@
-<%= render partial: '/shared/header', locals: {section: @component.name + " > Alle Kunden", back: true} %>
 <%= render partial: '/shared/flash_message'%>
+<%= render partial: '/customer/modal/newCustomer' %>
+<div class="page-header">
+  <h1>Alle Kunden</h1>
+</div>
 <div class="row">
   <div class="col-md-12", align="right">
-    <%= link_to new_customer_path(component: @component), :class => "btn btn-primary", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Neuen Kunden anlegen"  do %>
-     Neuer Kunde
-    <% end %>
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newCustomer">
+      Neuer Kunde
+    </button>
     <br>
   </div>
 </div>
@@ -25,7 +28,7 @@
               <td><%=customer.name%></td>
               <td><%=customer.description%></td>
               <td>
-                <%= link_to project_index_path(customer: customer), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Kunde öffnen" do %>
+                <%= link_to customer_path(customer), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Kunde öffnen" do %>
                   <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
                 <%end%>
                 <%= link_to edit_customer_path(customer, component: @component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Kunde ändern" do %>

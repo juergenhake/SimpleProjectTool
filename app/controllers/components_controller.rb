@@ -8,7 +8,8 @@ class ComponentsController < ApplicationController
   def show
     @newHistory = History.new
     @newFile = Attachment.new
-    @files = Attachment.all
+    @files = @component.attachments.paginate(:page => params[:filepage])
+    @customers = @component.customers.paginate(:page => params[:customerpage])
   end
 
   def create
@@ -17,6 +18,7 @@ class ComponentsController < ApplicationController
 
     respond_to do |format|
       if @component.save
+        add_History_from_component(@component)
         format.html { redirect_to components_path, success: 'Bauteil wurde erfolgreich erstellt.' }
         format.json { render :show, status: :created, location: @component }
       else

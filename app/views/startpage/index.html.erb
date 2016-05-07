@@ -39,12 +39,15 @@
                 <th>Titel</th>
                 <th>Beschreibung</th>
               </tr>
-              <% @projects.each do |project| %>
+              <tbody>
+                <% @projects.each do |project| %>
                   <tr onclick="location.href='<%= project_path(project) %>'">
                       <td><%=project.title%></td>
                       <td><%=project.description%></td>
                   </tr>
-              <%end%>
+                <%end%>
+              </tbody>
+
             </table>
           </div>
       </div>
