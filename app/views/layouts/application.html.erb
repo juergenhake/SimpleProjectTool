@@ -15,6 +15,48 @@
       <%= link_to root_path, :class => "navbar-brand" do %>
        Jürgenhake
        <%end%>
+      <% if user_signed_in? %>
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              <strong>Projekte</strong>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <%= link_to project_index_path, :class => "dropdown_element" do%>
+              <li>Alle Projekte</li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              <strong>Bauteile</strong>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <%= link_to components_path, :class => "dropdown_element" do%>
+              <li>Alle Bauteile</li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+              <strong>Kunden</strong>
+              <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <%= link_to customer_index_path, :class => "dropdown_element" do%>
+              <li>Alle Kunden</li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
+      <% end %>
+
       <ul class="nav navbar-nav navbar-right">
         <%= render partial: '/shared/userWidget'%>
       </ul>
@@ -23,6 +65,7 @@
   </div><!-- /.container-fluid -->
   </nav>
   <div class="container-fluid">
+
   <%= yield %>
   </div>
 </body>

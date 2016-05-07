@@ -11,7 +11,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160504133253) do
+ActiveRecord::Schema.define(version: 20160507081027) do
+
+  create_table "attachments", force: :cascade do |t|
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.datetime "upload_at",         default: '2016-05-07 08:21:01', null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.integer  "customer_id"
+    t.integer  "projectItem_id"
+    t.integer  "project_id"
+    t.integer  "component_id"
+    t.integer  "user_id"
+  end
+
+  add_index "attachments", ["component_id"], name: "index_attachments_on_component_id"
+  add_index "attachments", ["customer_id"], name: "index_attachments_on_customer_id"
+  add_index "attachments", ["projectItem_id"], name: "index_attachments_on_projectItem_id"
+  add_index "attachments", ["project_id"], name: "index_attachments_on_project_id"
+  add_index "attachments", ["user_id"], name: "index_attachments_on_user_id"
 
   create_table "components", force: :cascade do |t|
     t.string   "component_id_sap"
@@ -36,6 +57,24 @@ ActiveRecord::Schema.define(version: 20160504133253) do
 
   add_index "customers", ["component_id"], name: "index_customers_on_component_id"
   add_index "customers", ["projects_id"], name: "index_customers_on_projects_id"
+
+  create_table "histories", force: :cascade do |t|
+    t.string   "message"
+    t.boolean  "systemflag",     default: false
+    t.integer  "customer_id"
+    t.integer  "projectItem_id"
+    t.integer  "project_id"
+    t.integer  "component_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "histories", ["component_id"], name: "index_histories_on_component_id"
+  add_index "histories", ["customer_id"], name: "index_histories_on_customer_id"
+  add_index "histories", ["projectItem_id"], name: "index_histories_on_projectItem_id"
+  add_index "histories", ["project_id"], name: "index_histories_on_project_id"
+  add_index "histories", ["user_id"], name: "index_histories_on_user_id"
 
   create_table "project_items", force: :cascade do |t|
     t.string   "title"

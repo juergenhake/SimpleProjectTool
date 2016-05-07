@@ -1,15 +1,19 @@
 class ComponentsController < ApplicationController
-  before_action :find_component, only: [:destroy, :update, :edit]
+  before_action :find_component, only: [:destroy, :update, :edit, :show]
   def index
     @components = Component.all
     @newComponent = Component.new
   end
 
   def show
+    @newHistory = History.new
+    @newFile = Attachment.new
+    @files = Attachment.all
   end
 
   def create
     @component = Component.new(component_params)
+
 
     respond_to do |format|
       if @component.save

@@ -1,31 +1,122 @@
+<%= render partial: '/components/modal/newHistory' %>
+<%= render partial: '/components/modal/newAttachment' %>
 <%= render partial: '/shared/flash_message'%>
-<div class="row">
-  <div class="col-md-6">
-    <h1>Alle Kunden</h1>
-  </div>
-  <div class="col-md-6">
-    <%= link_to new_customer_path do %>
-      <i class="glyphicon glyphicon-plus">add</i> Neuer Kunde
-    <% end %>
-  </div>
+<div class="page-header">
+  <h1>Bauteil <%= @component.id %>, <small><%= @component.name %></small></h1>
 </div>
+
+<div class="page-header">
+  <ul class="nav nav-pills">
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newHistory">Neuer Kommentar</a></li>
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newAttachment">Datei anhängen</a></li>
+  </ul>
+</div>
+
 <div class="row">
     <div class="col-md-12">
-      <table class="table table-hover">
-        <tr>
-          <th>#</th>
-          <th>Kundennummer SAP</th>
-          <th>Kundenname</th>
-          <th>Kundenbeschreibung</th>
-        </tr>
-        <% @customers.each do |customer| %>
-          <tr>
-            <td><%=customer.id%></td>
-            <td><%=customer.customer_id_sap%></td>
-            <td><%=customer.name%></td>
-            <td><%=customer.description%></td>
-          </tr>
-        <%end%>
-      </table>
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Bauteil-Details</h3>
+          </div>
+          <table class="table table-hover">
+            <tr>
+              <th>Bauteilnummer SAP</th>
+            </tr>
+            <tr>
+              <td><%=@component.component_id_sap%></td>
+            </tr>
+            <tr>
+              <th>Bauteil-Beschreibung</th>
+            </tr>
+            <tr>
+              <td><%=@component.description%></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Kunden welche das Bauteil nutzen</h3>
+          </div>
+          <table class="table table-hover">
+            <tr>
+              <th>#</th>
+              <th>Kundennummer SAP</th>
+              <th>Kundenname</th>
+              <th>Kundenbeschreibung</th>
+            </tr>
+            <% @component.customers.each do |customer| %>
+                <tr>
+                  <td><%=customer.id%></td>
+                  <td><%=customer.customer_id_sap%></td>
+                  <td><%=customer.name%></td>
+                  <td><%=customer.description%></td>
+                </tr>
+            <%end%>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Hochgeladene Dateien zum Bauteil</h3>
+          </div>
+          <% if @files.blank? %>
+              Keine Dateien gefunden!
+              <%= link_to "Download", model.avatar.url(:original, false) %>
+          <% else %>
+              <table class="table table-hover">
+                <tr>
+                  <th>Dateiname</th>
+                  <th>Dateityp</th>
+                  <th>Hochgeladen von</th>
+                  <th>Hochgeladen am</th>
+                </tr>
+                <% @files.each do |file| %>
+                  <tr onclick="window.open('<%= file.file.url(:original, false) %>','_blank','')">
+                    <td><%=file.file_file_name%></td>
+                    <td><%=file.file_content_type%></td>
+                    <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                    <td><%=file.file_updated_at%></td>
+                  </tr>
+                <%end%>
+              </table>
+          <% end %>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="row">
+  <div <div class="col-md-12">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Logbuch</h3>
+          </div>
+            <% if @component.historys.blank? %>
+              Keine Kommentare gefunden!
+            <% else %>
+              <table class="table table-hover">
+                <% @component.historys.each do |history| %>
+                    <tr>
+                      <% if history.systemflag %>
+                        <th>System schrieb:</th>
+                      <% else %>
+                        <th><%= history.user.first_name %> <%= history.user.last_name %> schrieb:</th>
+                      <% end %>
+                    </tr>
+                    <tr>
+                      <td><%=history.message%></td>
+                    </tr>
+                <%end%>
+              </table>
+            <% end %>
+        </div>
+      </div>
+
     </div>
 </div>

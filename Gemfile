@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem "paperclip", "~> 5.0.0.beta1"
 gem 'devise'
 gem 'select2-rails'
 gem 'bootstrap-sass', '~> 3.3.6'
