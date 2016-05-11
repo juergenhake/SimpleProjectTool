@@ -1,5 +1,10 @@
 class Project < ActiveRecord::Base
-  belongs_to :customer
   has_many :projectItems, dependent: :destroy
   has_many :historys, dependent: :destroy
+  has_many :attachments, dependent: :destroy
+  belongs_to :user
+  belongs_to :component
+  belongs_to :customer
+  enum type: [:Sonstige]
+
 end

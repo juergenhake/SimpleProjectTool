@@ -18,10 +18,10 @@ class ProjectItemsController < ApplicationController
 
     respond_to do |format|
       if @item.save
-        format.html { redirect_to project_items_path(project: @project), success: 'Aufgabe wurde erfolgreich erstellt.' }
+        format.html { redirect_to project_path(@project), success: 'Aufgabe wurde erfolgreich erstellt.' }
         format.json { render :show, status: :created, location: @item }
       else
-        format.html { redirect_to project_items_path(project: @project), danger: 'Aufgabe wurde nicht erstellt' }
+        format.html { redirect_to project_path(@project), danger: 'Aufgabe wurde nicht erstellt' }
         format.json { render json: @component.errors, status: :unprocessable_entity }
       end
     end

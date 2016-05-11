@@ -14,17 +14,26 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:account_update) { |u| u.permit [:first_name, :last_name, :email, :password, :password_confirmation, :current_password, roles: [] ] }
   end
 
-  def add_History_from_attachment(params, attachment)
+  def add_History_from_attachment(attachment, type)
     @history = History.new
     @history.user = current_user
     @history.systemflag = true
-    if params.has_key?(:customer_id)
-      @history.customer = Customer.find(params[:customer_id])
+
+    if attachment.customer.present?
+      @history.customer = attachment.customer
     end
-    if params.has_key?(:component_id)
-      @history.component = Component.find(params[:component_id])
+    if attachment.component.present?
+      @history.component = attachment.component
     end
-    @history.message = "Die Datei " + attachment.file_file_name + " wurde von " + current_user.first_name + " " + current_user.last_name + " angehangen"
+    if attachment.project.present?
+      @history.project = attachment.project
+    end
+    if type == 0
+      @history.message = "Die Datei " + attachment.file_file_name + " wurde von " + current_user.first_name + " " + current_user.last_name + " angehangen"
+    elsif type == 1
+      @history.message = "Die Datei " + attachment.file_file_name + " wurde von " + current_user.first_name + " " + current_user.last_name + " gelöscht"
+
+    end
     @history.save
   end
 
@@ -34,6 +43,15 @@ class ApplicationController < ActionController::Base
     @history.systemflag = true
     @history.component = component
     @history.message = "Das Bauteil wurde von " + current_user.first_name + " " + current_user.last_name + " angelegt"
+    @history.save
+  end
+
+  def add_History_from_project(project)
+    @history = History.new
+    @history.user = current_user
+    @history.systemflag = true
+    @history.project = project
+    @history.message = "Das Projekt wurde von " + current_user.first_name + " " + current_user.last_name + " angelegt"
     @history.save
   end
 end

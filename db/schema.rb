@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160507140045) do
+ActiveRecord::Schema.define(version: 20160511090500) do
 
   create_table "attachments", force: :cascade do |t|
     t.string   "file_file_name"
@@ -105,12 +105,25 @@ ActiveRecord::Schema.define(version: 20160507140045) do
     t.string   "description"
     t.integer  "customer_id"
     t.integer  "projectItem_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.integer  "type"
+    t.datetime "started_at",       default: '2016-05-08 07:22:18'
+    t.datetime "finished_at"
+    t.boolean  "finished_flag"
+    t.string   "reklamation_lief"
+    t.string   "lief_nr"
+    t.string   "finished_text"
+    t.integer  "component_id"
+    t.integer  "user_id"
+    t.integer  "attachments_id"
   end
 
+  add_index "projects", ["attachments_id"], name: "index_projects_on_attachments_id"
+  add_index "projects", ["component_id"], name: "index_projects_on_component_id"
   add_index "projects", ["customer_id"], name: "index_projects_on_customer_id"
   add_index "projects", ["projectItem_id"], name: "index_projects_on_projectItem_id"
+  add_index "projects", ["user_id"], name: "index_projects_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

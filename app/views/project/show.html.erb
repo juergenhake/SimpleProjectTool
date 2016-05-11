@@ -1,0 +1,232 @@
+<%= render partial: '/project/modal/newHistory' %>
+<%= render partial: '/project/modal/newAttachment' %>
+<%= render partial: '/project/modal/newProjectItem' %>
+<%= render partial: '/shared/flash_message'%>
+<div class="page-header">
+  <h1>Projekt <%= @project.id %>, <small><%= @project.title %></small></h1>
+</div>
+
+<div class="page-header">
+  <ul class="nav nav-pills">
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newHistory">Neuer Kommentar</a></li>
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newAttachment">Datei anhängen</a></li>
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newProjectItem">Neue Aufgabe</a></li>
+  </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Projekt-Details</h3>
+          </div>
+          <table class="table table-hover">
+            <tr>
+              <th>Projektleiter</th>
+            </tr>
+            <tr>
+              <% if @project.user.present? %>
+                <td><%=@project.user.first_name%> <%=@project.user.last_name%></td>
+              <% else %>
+                <td>Kein Projektleiter definiert!</td>
+              <% end %>
+            </tr>
+            <tr>
+              <th>Projekt-Beschreibung</th>
+            </tr>
+            <tr>
+              <td><%=@project.description%></td>
+            </tr>
+             <tr>
+              <th>Reklamation Lieferant</th>
+            </tr>
+            <tr>
+              <td><%=@project.reklamation_lief%></td>
+            </tr>
+             <tr>
+              <th>Lieferscheinnummer</th>
+            </tr>
+            <tr>
+              <td><%=@project.lief_nr%></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <% if @project.customer.present? %>
+              <h3 class="panel-title">Kunden Details</h3>
+            <% elsif @project.component.present? %>
+              <h3 class="panel-title">Bauteil Deatails</h3>
+            <% else %>
+              <h3 class="panel-title">Keine Zuordnung!</h3>
+            <% end %>
+          </div>
+          <% if (@project.component.blank? && @project.customer.blank?) %>
+            Keine Zuordnung gefunden!
+          <% else %>
+            <table class="table table-hover">
+              <% if @project.customer.present? %>
+                <tr>
+                  <th>Kundennummer</th>
+                </tr>
+                <tr>
+                  <td><%=@project.customer.id%></td>
+                </tr>
+                <tr>
+                  <th>Kundenname</th>
+                </tr>
+                <tr>
+                  <td><%=@project.customer.name%></td>
+                </tr>
+                <tr>
+                  <th>Kundennummer-SAP</th>
+                </tr>
+                <tr>
+                  <td><%=@project.customer.customer_id_sap%></td>
+                </tr>
+                <tr>
+                  <th>Kundennummer Beschreibung</th>
+                </tr>
+                <tr>
+                  <td><%=@project.customer.description%></td>
+                </tr>
+              <% elsif @project.component.present? %>
+                <tr>
+                  <th>Bauteilnummer</th>
+                </tr>
+                <tr>
+                  <td><%=@project.component.id%></td>
+                </tr>
+                <tr>
+                  <th>Bezeichnung</th>
+                </tr>
+                <tr>
+                  <td><%=@project.component.name%></td>
+                </tr>
+                <tr>
+                  <th>Bauteilnummer-SAP</th>
+                </tr>
+                <tr>
+                  <td><%=@project.component.component_id_sap%></td>
+                </tr>
+                <tr>
+                  <th>Bauteil Beschreibung</th>
+                </tr>
+                <tr>
+                  <td><%=@project.component.description%></td>
+                </tr>
+              <% end %>
+            </table>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Hochgeladene Dateien</h3>
+          </div>
+          <% if @files.blank? %>
+              Keine Dateien gefunden!
+          <% else %>
+              <table class="table table-hover">
+                <tr>
+                  <th>Dateiname</th>
+                  <th>Dateityp</th>
+                  <th>Hochgeladen von</th>
+                  <th colspan="2">Hochgeladen am</th>
+                </tr>
+                <% @files.each do |file| %>
+                  <tr>
+                    <td>
+                      <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                      <%=file.file_file_name%>
+                      <% end %>
+                    </td>
+                    <td><%=file.file_content_type%></td>
+                    <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                    <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                    <td>
+                      <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                      <%end%>
+                    </td>
+                  </tr>
+                <%end%>
+              </table>
+              <% if @files.count/10 > 1 %>
+                <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'filepage' %>
+              <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="row">
+  <div <div class="col-md-12">
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Aufgaben</h3>
+          </div>
+          <% if @project.projectItems.blank? %>
+            Keine Aufgaben gefunden!
+          <% else %>
+            <table class="table table-hover">
+              <tr>
+                <th>Titel</th>
+                <th>Startdatum</th>
+                <th>Enddatum</th>
+                <th>Verantwortlicher</th>
+              </tr>
+              <% @project.projectItems.each do |item| %>
+                <tr>
+                  <td><%=item.title %></td>
+                  <td><%=item.start.strftime("%d.%m.%Y")%></td>
+                  <td><%=item.end.strftime("%d.%m.%Y")%></td>
+                  <td><%=item.user.first_name%> <%=item.user.last_name%></td>
+                </tr>
+
+              <%end%>
+            </table>
+          <% end %>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Logbuch</h3>
+          </div>
+          <div class="panel-body fixed-panel">
+            <% if @project.historys.blank? %>
+              Keine Kommentare gefunden!
+            <% else %>
+              <table class="table">
+                <% @project.historys.each do |history| %>
+                  <thead>
+                    <tr>
+                      <% if history.systemflag %>
+                        <th>System schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
+                      <% else %>
+                        <th><%= history.user.first_name %> <%= history.user.last_name %> schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
+                      <% end %>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><%=history.message%></td>
+                    </tr>
+                  </tbody>
+                <%end%>
+              </table>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>

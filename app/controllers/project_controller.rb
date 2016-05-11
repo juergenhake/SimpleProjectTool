@@ -1,25 +1,34 @@
 class ProjectController < ApplicationController
-  before_action :find_project, only: [:edit, :destroy,:update]
-  before_action :find_customer, only: [:new, :index, :edit, :destroy]
+  before_action :find_project, only: [:edit, :destroy,:update, :show]
+
 
   def index
-    @projects = @customer.projects
-
+    @projects = Project.all
+    @newProject = Project.new
   end
 
   def show
+    @newHistory = History.new
+    @newFile = Attachment.new
+    @newItem = ProjectItem.new
+    @files = @project.attachments.paginate(:page => params[:filepage])
   end
 
   def create
     @project = Project.new(project_params)
-    @customer = Customer.find(project_params[:customer_id])
+
+    case project_params[:type]
+    when "Sonstige"
+      @project.Sonstige!
+    end
 
     respond_to do |format|
       if @project.save
-        format.html { redirect_to project_index_path(customer: @customer), success: 'Projekt wurde erfolgreich erstellt.' }
+        add_History_from_project(@project)
+        format.html { redirect_to project_index_path, success: 'Projekt wurde erfolgreich erstellt.' }
         format.json { render :show, status: :created, location: @project }
       else
-        format.html { redirect_to project_index_path(customer: @customer), danger: 'Projekt wurde nicht erstellt' }
+        format.html { redirect_to project_index_path, danger: 'Projekt wurde nicht erstellt' }
         format.json { render json: @customer.errors, status: :unprocessable_entity }
       end
     end
@@ -51,7 +60,7 @@ class ProjectController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :customer_id)
+    params.require(:project).permit(:title, :description, :customer_id, :component_id, :user_id, :lief_nr, :reklamation_lief)
   end
 
   def find_project
@@ -61,4 +70,5 @@ class ProjectController < ApplicationController
   def find_customer
     @customer = Customer.find(params[:customer])
   end
+
 end
