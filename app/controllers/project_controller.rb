@@ -10,7 +10,7 @@ class ProjectController < ApplicationController
   def show
     @newHistory = History.new
     @newFile = Attachment.new
-    @newItem = ProjectItem.new
+    @newItem = Task.new
     @files = @project.attachments.paginate(:page => params[:filepage])
   end
 

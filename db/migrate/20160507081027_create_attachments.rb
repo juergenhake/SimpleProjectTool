@@ -5,7 +5,7 @@ class CreateAttachments < ActiveRecord::Migration
       t.datetime :upload_at, :null => false, :default => Time.now
       t.timestamps null: false
       t.references :customer, index: true
-      t.references :projectItem, index: true
+      t.references :task, index: true
       t.references :project, index: true
       t.references :component, index: true
       t.references :user, index: true

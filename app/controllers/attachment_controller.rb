@@ -19,6 +19,11 @@ class AttachmentController < ApplicationController
       find_project(attachment_params[:project_id])
       @attachment.project = @project
     end
+    @task
+    if attachment_params.has_key?(:task_id)
+      find_task(attachment_params[:task_id])
+      @attachment.task = @task
+    end
 
     respond_to do |format|
       if @attachment.save
@@ -35,6 +40,10 @@ class AttachmentController < ApplicationController
             format.html { redirect_to project_path(@project), success: 'Datei wurde hochgeladen.' }
             format.json { render :show, status: :created, location: @history }
           end
+          if attachment_params.has_key?(:task_id)
+            format.html { redirect_to task_path(@task), success: 'Datei wurde hochgeladen.' }
+            format.json { render :show, status: :created, location: @history }
+          end
 
       else
         if attachment_params.has_key?(:customer_id)
@@ -47,6 +56,10 @@ class AttachmentController < ApplicationController
         end
         if attachment_params.has_key?(:project_id)
           format.html { redirect_to component_path(@project), danger: @attachment.errors }
+          format.json { render json: @attachment.errors, status: :unprocessable_entity }
+        end
+        if attachment_params.has_key?(:task_id)
+          format.html { redirect_to task_path(@task), danger: @attachment.errors }
           format.json { render json: @attachment.errors, status: :unprocessable_entity }
         end
       end
@@ -62,8 +75,8 @@ class AttachmentController < ApplicationController
       @path = customer_path(@attachment.customer)
     elsif @attachment.project.present?
       @path = project_path(@attachment.project)
-    elsif @attachment.projectItem.present?
-      @path = projectItem_path(@attachment.projectItem)
+    elsif @attachment.task.present?
+      @path = task_path(@attachment.task)
     end
 
       @attachment.destroy
@@ -85,7 +98,7 @@ class AttachmentController < ApplicationController
   private
 
   def attachment_params
-    params.require(:attachment).permit(:file, :component_id, :customer_id, :project_id)
+    params.require(:attachment).permit(:file, :component_id, :customer_id, :project_id, :task_id)
   end
 
   def find_component(id)
@@ -99,6 +112,11 @@ class AttachmentController < ApplicationController
   def find_project(id)
     @project = Project.find(id)
   end
+
+  def find_task(id)
+    @task = Task.find(id)
+  end
+
 
   def find_attachment
     @attachment = Attachment.find(params[:id])

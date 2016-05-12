@@ -173,7 +173,7 @@
           <div class="panel-heading">
             <h3 class="panel-title">Aufgaben</h3>
           </div>
-          <% if @project.projectItems.blank? %>
+          <% if @project.tasks.blank? %>
             Keine Aufgaben gefunden!
           <% else %>
             <table class="table table-hover">
@@ -183,9 +183,11 @@
                 <th>Enddatum</th>
                 <th>Verantwortlicher</th>
               </tr>
-              <% @project.projectItems.each do |item| %>
+              <% @project.tasks.each do |item| %>
                 <tr>
-                  <td><%=item.title %></td>
+                  <td>
+                    <%= link_to task_path(item) do%><%=item.title %><% end %>
+                  </td>
                   <td><%=item.start.strftime("%d.%m.%Y")%></td>
                   <td><%=item.end.strftime("%d.%m.%Y")%></td>
                   <td><%=item.user.first_name%> <%=item.user.last_name%></td>

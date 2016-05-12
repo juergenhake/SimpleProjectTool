@@ -11,18 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160511090500) do
+ActiveRecord::Schema.define(version: 20160512134352) do
 
   create_table "attachments", force: :cascade do |t|
     t.string   "file_file_name"
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
-    t.datetime "upload_at",         default: '2016-05-07 08:21:01', null: false
+    t.datetime "upload_at",         default: '2016-05-11 11:40:04', null: false
     t.datetime "created_at",                                        null: false
     t.datetime "updated_at",                                        null: false
     t.integer  "customer_id"
-    t.integer  "projectItem_id"
+    t.integer  "task_id"
     t.integer  "project_id"
     t.integer  "component_id"
     t.integer  "user_id"
@@ -30,8 +30,8 @@ ActiveRecord::Schema.define(version: 20160511090500) do
 
   add_index "attachments", ["component_id"], name: "index_attachments_on_component_id"
   add_index "attachments", ["customer_id"], name: "index_attachments_on_customer_id"
-  add_index "attachments", ["projectItem_id"], name: "index_attachments_on_projectItem_id"
   add_index "attachments", ["project_id"], name: "index_attachments_on_project_id"
+  add_index "attachments", ["task_id"], name: "index_attachments_on_task_id"
   add_index "attachments", ["user_id"], name: "index_attachments_on_user_id"
 
   create_table "components", force: :cascade do |t|
@@ -41,9 +41,11 @@ ActiveRecord::Schema.define(version: 20160511090500) do
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "customer_id"
+    t.integer  "projects_id"
   end
 
   add_index "components", ["customer_id"], name: "index_components_on_customer_id"
+  add_index "components", ["projects_id"], name: "index_components_on_projects_id"
 
   create_table "components_customers", force: :cascade do |t|
     t.integer "customer_id"
@@ -68,47 +70,31 @@ ActiveRecord::Schema.define(version: 20160511090500) do
 
   create_table "histories", force: :cascade do |t|
     t.string   "message"
-    t.boolean  "systemflag",     default: false
+    t.boolean  "systemflag",   default: false
     t.integer  "customer_id"
-    t.integer  "projectItem_id"
+    t.integer  "task_id"
     t.integer  "project_id"
     t.integer  "component_id"
     t.integer  "user_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "histories", ["component_id"], name: "index_histories_on_component_id"
   add_index "histories", ["customer_id"], name: "index_histories_on_customer_id"
-  add_index "histories", ["projectItem_id"], name: "index_histories_on_projectItem_id"
   add_index "histories", ["project_id"], name: "index_histories_on_project_id"
+  add_index "histories", ["task_id"], name: "index_histories_on_task_id"
   add_index "histories", ["user_id"], name: "index_histories_on_user_id"
-
-  create_table "project_items", force: :cascade do |t|
-    t.string   "title"
-    t.string   "description"
-    t.datetime "start"
-    t.datetime "end"
-    t.datetime "finished"
-    t.string   "user"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "project_id"
-    t.integer  "user_id"
-  end
-
-  add_index "project_items", ["project_id"], name: "index_project_items_on_project_id"
-  add_index "project_items", ["user_id"], name: "index_project_items_on_user_id"
 
   create_table "projects", force: :cascade do |t|
     t.string   "title"
     t.string   "description"
     t.integer  "customer_id"
-    t.integer  "projectItem_id"
+    t.integer  "task_id"
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
     t.integer  "type"
-    t.datetime "started_at",       default: '2016-05-08 07:22:18'
+    t.datetime "started_at",       default: '2016-05-11 11:40:04'
     t.datetime "finished_at"
     t.boolean  "finished_flag"
     t.string   "reklamation_lief"
@@ -122,8 +108,28 @@ ActiveRecord::Schema.define(version: 20160511090500) do
   add_index "projects", ["attachments_id"], name: "index_projects_on_attachments_id"
   add_index "projects", ["component_id"], name: "index_projects_on_component_id"
   add_index "projects", ["customer_id"], name: "index_projects_on_customer_id"
-  add_index "projects", ["projectItem_id"], name: "index_projects_on_projectItem_id"
+  add_index "projects", ["task_id"], name: "index_projects_on_task_id"
   add_index "projects", ["user_id"], name: "index_projects_on_user_id"
+
+  create_table "tasks", force: :cascade do |t|
+    t.string   "title"
+    t.string   "description"
+    t.datetime "start"
+    t.datetime "end"
+    t.datetime "finished"
+    t.string   "user"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "project_id"
+    t.integer  "user_id"
+    t.integer  "attachments_id"
+    t.integer  "historys_id"
+  end
+
+  add_index "tasks", ["attachments_id"], name: "index_tasks_on_attachments_id"
+  add_index "tasks", ["historys_id"], name: "index_tasks_on_historys_id"
+  add_index "tasks", ["project_id"], name: "index_tasks_on_project_id"
+  add_index "tasks", ["user_id"], name: "index_tasks_on_user_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -136,7 +142,7 @@ ActiveRecord::Schema.define(version: 20160511090500) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.integer  "projectItem_id"
+    t.integer  "task_id"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "first_name"
@@ -144,7 +150,7 @@ ActiveRecord::Schema.define(version: 20160511090500) do
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["projectItem_id"], name: "index_users_on_projectItem_id"
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+  add_index "users", ["task_id"], name: "index_users_on_task_id"
 
 end

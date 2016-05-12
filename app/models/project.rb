@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  has_many :projectItems, dependent: :destroy
+  has_many :tasks, dependent: :destroy
   has_many :historys, dependent: :destroy
   has_many :attachments, dependent: :destroy
   belongs_to :user

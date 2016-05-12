@@ -50,6 +50,8 @@ class CustomerController < ApplicationController
     @customer = Customer.new
   end
 
+
+
   private
 
   def customer_params

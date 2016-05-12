@@ -15,7 +15,7 @@
                 <th>Ende</th>
               </tr>
               <% @items.each do |item| %>
-                  <tr onclick="location.href='<%= project_item_path(item) %>'">
+                  <tr onclick="location.href='<%= task_path(item) %>'">
                       <td><%=item.project.title%></td>
                       <td><%=item.title%></td>
                       <td><%=item.description%></td>

@@ -28,6 +28,9 @@ class ApplicationController < ActionController::Base
     if attachment.project.present?
       @history.project = attachment.project
     end
+    if attachment.task.present?
+      @history.task = attachment.task
+    end
     if type == 0
       @history.message = "Die Datei " + attachment.file_file_name + " wurde von " + current_user.first_name + " " + current_user.last_name + " angehangen"
     elsif type == 1
@@ -52,6 +55,19 @@ class ApplicationController < ActionController::Base
     @history.systemflag = true
     @history.project = project
     @history.message = "Das Projekt wurde von " + current_user.first_name + " " + current_user.last_name + " angelegt"
+    @history.save
+  end
+
+  def add_History_from_task(task, message = nil)
+    @history = History.new
+    @history.user = current_user
+    @history.systemflag = true
+    @history.task = task
+    if message.present?
+      @history.message = message
+    else
+      @history.message = "Die Aufgabe wurde von " + current_user.first_name + " " + current_user.last_name + " angelegt"
+    end
     @history.save
   end
 end

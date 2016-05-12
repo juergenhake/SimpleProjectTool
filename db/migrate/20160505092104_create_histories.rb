@@ -4,7 +4,7 @@ class CreateHistories < ActiveRecord::Migration
       t.string :message
       t.boolean :systemflag, default: false
       t.references :customer, index: true
-      t.references :projectItem, index: true
+      t.references :task, index: true
       t.references :project, index: true
       t.references :component, index: true
       t.references :user, index: true

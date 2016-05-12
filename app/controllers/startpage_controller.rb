@@ -6,7 +6,7 @@ class StartpageController < ApplicationController
   end
 
   def findItemsByUser
-    @items = ProjectItem.where(user_id: current_user)
+    @items = Task.where(user_id: current_user)
     getUsersProjects
   end
 

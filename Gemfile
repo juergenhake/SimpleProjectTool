@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'jquery-turbolinks'
 gem 'will_paginate-bootstrap'
 gem "paperclip", "~> 5.0.0.beta1"
 gem 'devise'

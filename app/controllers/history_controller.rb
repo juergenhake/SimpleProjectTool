@@ -18,6 +18,11 @@ class HistoryController < ApplicationController
       find_project(history_params[:project_id])
       @history.project = @project
     end
+    @task
+    if history_params.has_key?(:task_id)
+      find_task(history_params[:task_id])
+      @history.task = @task
+    end
 
     respond_to do |format|
       if @history.save
@@ -33,6 +38,10 @@ class HistoryController < ApplicationController
           format.html { redirect_to project_path(@project), success: 'Kommentar wurde erstellt.' }
           format.json { render :show, status: :created, location: @history }
         end
+        if history_params.has_key?(:task_id)
+          format.html { redirect_to task_path(@task), success: 'Kommentar wurde erstellt.' }
+          format.json { render :show, status: :created, location: @history }
+        end
       else
         if history_params.has_key?(:customer_id)
           format.html { redirect_to customer_path(@customer), danger: 'Kommentar wurde nicht erstellt.' }
@@ -46,6 +55,10 @@ class HistoryController < ApplicationController
           format.html { redirect_to component_path(@project), danger: 'Kommentar wurde nicht erstellt.' }
           format.json { render json: @customer.errors, status: :unprocessable_entity }
         end
+        if history_params.has_key?(:task_id)
+          format.html { redirect_to task_path(@task), danger: 'Kommentar wurde nicht erstellt.' }
+          format.json { render json: @customer.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -53,7 +66,7 @@ class HistoryController < ApplicationController
   private
 
   def history_params
-    params.require(:history).permit(:message, :component_id, :customer_id, :project_id)
+    params.require(:history).permit(:message, :component_id, :customer_id, :project_id, :task_id)
   end
 
   def find_component(id)
@@ -66,5 +79,9 @@ class HistoryController < ApplicationController
 
   def find_project(id)
     @project = Project.find(id)
+  end
+
+  def find_task(id)
+    @task = Task.find(id)
   end
 end
