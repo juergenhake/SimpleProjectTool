@@ -4,7 +4,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :init_objects_for_global_modals
   add_flash_types :success, :warning, :danger, :info
+
 
 
   protected
@@ -13,6 +15,12 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit [:first_name, :last_name, :email, :password, :password_confirmation, roles: [] ] }
     devise_parameter_sanitizer.for(:account_update) { |u| u.permit [:first_name, :last_name, :email, :password, :password_confirmation, :current_password, roles: [] ] }
   end
+
+  def init_objects_for_global_modals
+    @newComponent = Component.new
+    @newCustomer = Customer.new
+  end
+
 
   def add_History_from_attachment(attachment, type)
     @history = History.new
@@ -70,4 +78,26 @@ class ApplicationController < ActionController::Base
     end
     @history.save
   end
+
+  def getProjectsToAdd(object)
+      @addprojects = Array.new
+      @tmpprojects = Project.all
+      if @tmpprojects.count > 0
+        @tmpprojects.each do | project |
+          flag = false
+          if (project.component.blank? && project.customer.blank?)
+            flag = true
+            object.projects.each do | p |
+              if project.id == p.id
+                flag = false
+              end
+            end
+          end
+          if flag
+            @addprojects << project
+          end
+        end
+      end
+  end
+
 end

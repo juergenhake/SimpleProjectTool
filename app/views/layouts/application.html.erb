@@ -37,7 +37,11 @@
             </a>
             <ul class="dropdown-menu">
               <%= link_to components_path, :class => "dropdown_element" do%>
-              <li>Alle Bauteile</li>
+                <li>Alle Bauteile</li>
+              <% end %>
+              <li role="separator" class="divider"></li>
+              <%= link_to 'Create Component', 'data-toggle'=> "modal",'data-target' => '#createComponent', :class => "dropdown_element" do %>
+                <li>Bauteil anlegen</li>
               <% end %>
             </ul>
           </li>
@@ -52,6 +56,10 @@
               <%= link_to customer_index_path, :class => "dropdown_element" do%>
               <li>Alle Kunden</li>
               <% end %>
+              <li role="separator" class="divider"></li>
+              <%= link_to 'Create Customer', 'data-toggle'=> "modal",'data-target' => '#createCustomer', :class => "dropdown_element" do %>
+                <li>Kunde anlegen</li>
+              <% end %>
             </ul>
           </li>
         </ul>
@@ -65,8 +73,10 @@
   </div><!-- /.container-fluid -->
   </nav>
   <div class="container-fluid">
-
-  <%= yield %>
+    <%= render partial: '/shared/flash_message'%>
+    <%= render partial: '/shared/modal/createComponent' %>
+    <%= render partial: '/shared/modal/createCustomer' %>
+    <%= yield %>
   </div>
 </body>
 </html>

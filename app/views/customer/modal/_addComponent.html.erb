@@ -1,19 +1,19 @@
-<div class="modal fade" id="addCustomerToComponent" tabindex="-1" role="dialog">
+<div class="modal fade" id="addComponentToCustomer" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Kunden zum Bauteil <%=@component.name%> hinzufügen</h4>
+        <h4 class="modal-title">Bauteil zum Kunde <%=@customer.name%> hinzufügen</h4>
       </div>
-      <% if @addcustomers.count > 0 %>
+      <% if @addcomponents.count > 0 %>
         <div class="modal-body">
-          <%= form_for @addCustomer, url: {controller: "components", action: "addCustomer"} do |f| %>
-              <%= f.hidden_field :component_id, value: @component.id %>
+          <%= form_for @addComponent, url: {controller: "customers", action: "addComponent"} do |f| %>
+              <%= f.hidden_field :customer_id, value: @customer.id %>
               <div class="field">
                 <h5>
                    <%= f.label 'Kunde' %>
                 </h5>
-                 <%= f.collection_select(:customer_id, @addcustomers, :id, :name) %>
+                 <%= f.collection_select(:component_id, @addcomponents, :id, :name) %>
               </div>
         </div>
         <div class="modal-footer">
@@ -23,7 +23,7 @@
         </div>
       <% else %>
         <div class='modal-body'>
-            <h5> Es gibt keine aktuellen Kunden, welche hinzugefügt werden können!</h5>
+            <h5> Es gibt keine aktuellen Bauteile, welche hinzugefügt werden können!</h5>
           </div>
           <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

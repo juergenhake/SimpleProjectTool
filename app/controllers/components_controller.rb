@@ -6,6 +6,8 @@ class ComponentsController < ApplicationController
   end
 
   def show
+    getProjectsToAdd(@component)
+    getCustomersToAdd
     @newHistory = History.new
     @newFile = Attachment.new
     @addCustomer = Component.new
@@ -91,5 +93,24 @@ class ComponentsController < ApplicationController
 
   def find_project(id)
     @project = Project.find(id)
+  end
+
+  def getCustomersToAdd
+      @addcustomers = Array.new
+      @tmpcustomer = Customer.all
+
+      if @tmpcustomer.count > 0
+        @tmpcustomer.each do | customer |
+          flag = true
+          @component.customers.each do | c |
+            if customer.id == c.id
+              flag = false
+            end
+          end
+          if flag
+            @addcustomers << customer
+          end
+        end
+      end
   end
 end

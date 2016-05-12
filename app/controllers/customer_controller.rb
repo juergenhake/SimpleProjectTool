@@ -1,16 +1,21 @@
 class CustomerController < ApplicationController
-  before_action :find_customer, only: [:edit, :destroy, :update, :show]
-  before_action :find_component, only: [:edit, :destroy, :new]
+  before_action :find_customer, only: [:edit, :destroy, :update, :show, :addProject]
+
   def index
     @customers = Customer.all
     @newCustomer = Customer.new
   end
 
   def show
+    getComponentsToAdd
+    getProjectsToAdd(@customer)
+    @addProject = Customer.new
+    @addComponent = Customer.new
     @newHistory = History.new
     @newFile = Attachment.new
     @files = @customer.attachments.paginate(:page => params[:filepage])
     @projects = @customer.projects.paginate(:page => params[:projectpage])
+    @components = @customer.components.paginate(:page => params[:componentpage])
   end
 
   def create
@@ -50,19 +55,62 @@ class CustomerController < ApplicationController
     @customer = Customer.new
   end
 
+  def addProject
+    find_project(customer_params[:projects_id])
+    @customer.projects << @project
+    if @customer.save
+      redirect_to customer_path(@customer), notice: 'Projekt wurde erfolgreich hinzugefügt.'
+    else
+      redirect_to customer_path(@customer), alert: 'Projekt wurde nicht hinzugefügt.'
+    end
+  end
 
+  def addComponent
+    find_component(customer_params[:component_id])
+    @customer.components << @component
+    if @customer.save
+      redirect_to customer_path(@customer), notice: 'Bauteil wurde erfolgreich hinzugefügt.'
+    else
+      redirect_to customer_path(@customer), alert: 'Bauteil wurde nicht hinzugefügt.'
+    end
+  end
 
   private
 
   def customer_params
-    params.require(:customer).permit(:customer_id_sap, :description, :name)
+    params.require(:customer).permit(:customer_id_sap, :description, :name, :project_id, :customer_id, :component_id)
   end
 
   def find_customer
     @customer = Customer.find(params[:id])
   end
 
-  def find_component
-    @component = Component.find(params[:component])
+  def find_component(id)
+    @component = Component.find(id)
   end
+
+  def find_project(id)
+    @project = Project.find(id)
+  end
+
+  def getComponentsToAdd
+      @addcomponents = Array.new
+      @tmpcomponents = Component.all
+
+      if @tmpcomponents.count > 0
+        @tmpcomponents.each do | component |
+          flag = true
+          @customer.components.each do | c |
+            if component.id == c.id
+              flag = false
+            end
+          end
+          if flag
+            @addcomponents << component
+          end
+        end
+      end
+  end
+
+
 end
