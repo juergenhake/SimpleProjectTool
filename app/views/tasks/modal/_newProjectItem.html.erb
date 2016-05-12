@@ -1,0 +1,50 @@
+<div class="modal fade" id="newProjectItem" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Aufgabe erstellen</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_for @newitem, url: {action: "create"} do |f| %>
+            <%= f.hidden_field :project_id, value: @project.id %>
+            <div class="field">
+              <h5>
+               <%= f.label 'Aufgabe' %>
+              </h5>
+              <%= f.text_field :title, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Beschreibung' %>
+              </h5>
+              <%= f.text_area :description, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Verantwortlicher' %>
+              </h5>
+              <%= f.select :user_id, options_from_collection_for_select(User.all, :id, :last_name, :id), {}, {:multiple => false, :class => "multiselect2", :style => "width:200px;" } %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Startdatum' %>
+              </h5>
+              <%= f.text_field :start, "data-provide" => 'datepicker', "data-date-format" => 'dd.mm.yyyy', class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Enddatum' %>
+              </h5>
+              <%= f.text_field :end, "data-provide" => 'datepicker', "data-date-format" => 'dd.mm.yyyy', class: 'form-control' %>
+            </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <%= f.submit "Erstellen", class: 'btn btn-primary' %>
+          <% end %><br>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

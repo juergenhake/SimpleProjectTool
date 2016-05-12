@@ -1,12 +1,17 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   resources :customer
   resources :components
   resources :project
-  resources :project_items
-  put '/project_items/:id', to: 'project_items#finished', as: 'finished_project_item'
-
-  root 'components#index'
+  resources :tasks
+  resources :startpage
+  resources :history
+  resources :attachment
+  get '/task/:id', to: 'tasks#finished', as: 'finished_task'
+  post '/component/:id/addCustomer', to: 'components#addCustomer', as: 'addCustomer'
+  post '/component/:id/addProject', to: 'components#addProject', as: 'addProject'
+  root 'startpage#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

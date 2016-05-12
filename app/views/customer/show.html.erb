@@ -1,0 +1,146 @@
+<%= render partial: '/customer/modal/newHistory' %>
+<%= render partial: '/customer/modal/newAttachment' %>
+<%= render partial: '/shared/flash_message'%>
+<div class="page-header">
+  <h1>Kunde <%= @customer.id %>, <small><%= @customer.name %></small></h1>
+</div>
+
+<div class="page-header">
+  <ul class="nav nav-pills">
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newHistory">Neuer Kommentar</a></li>
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newAttachment">Datei anhängen</a></li>
+  </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Kunde-Details</h3>
+          </div>
+          <table class="table table-hover">
+            <tr>
+              <th>Kundennummer SAP</th>
+            </tr>
+            <tr>
+              <td><%=@customer.customer_id_sap%></td>
+            </tr>
+            <tr>
+              <th>Kunden-Beschreibung</th>
+            </tr>
+            <tr>
+              <td><%=@customer.description%></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Projekte zum Kunde</h3>
+          </div>
+          <% if @projects.blank? %>
+            Keine Projekte gefunden!
+          <% else %>
+            <table class="table table-hover">
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Beschreibung</th>
+              </tr>
+              <% @projects.each do |project| %>
+                  <tr>
+                    <td><%=project.id%></td>
+                    <td><%=project.title%></td>
+                    <td><%=project.description%></td>
+                  </tr>
+              <%end%>
+            </table>
+            <% if @projects.count/10 > 1 %>
+              <div class="panel-footer">
+                <%= will_paginate @projects, renderer: BootstrapPagination::Rails, :param_name => 'projectpage' %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Hochgeladene Dateien zum Kunden</h3>
+          </div>
+          <% if @files.blank? %>
+              Keine Dateien gefunden!
+          <% else %>
+              <table class="table table-hover">
+                <tr>
+                  <th>Dateiname</th>
+                  <th>Dateityp</th>
+                  <th>Hochgeladen von</th>
+                  <th colspan="2">Hochgeladen am</th>
+                </tr>
+                <% @files.each do |file| %>
+                  <tr>
+                    <td>
+                      <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                      <%=file.file_file_name%>
+                      <% end %>
+                    </td>
+                    <td><%=file.file_content_type%></td>
+                    <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                    <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                    <td>
+                      <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                      <%end%>
+                    </td>
+                  </tr>
+                <%end%>
+              </table>
+              <% if @files.count/10 > 1 %>
+                <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'filepage' %>
+              <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+</div>
+<div class="row">
+  <div <div class="col-md-12">
+      <div class="col-md-12">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Logbuch</h3>
+          </div>
+          <div class="panel-body fixed-panel">
+            <% if @customer.historys.blank? %>
+              Keine Kommentare gefunden!
+            <% else %>
+              <table class="table">
+                <% @customer.historys.each do |history| %>
+                  <thead>
+                    <tr>
+                      <% if history.systemflag %>
+                        <th>System schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
+                      <% else %>
+                        <th><%= history.user.first_name %> <%= history.user.last_name %> schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
+                      <% end %>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><%=history.message%></td>
+                    </tr>
+                  </tbody>
+                <%end%>
+              </table>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>

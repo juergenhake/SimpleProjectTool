@@ -7,30 +7,7 @@
       </div>
       <div class="panel-body">
 
-        <%= form_for @customer, url: {action: "create"} do |f| %>
-           <%= f.hidden_field :component_id, value: @component.id %>
-           <div class="field">
-              <h5>
-               <%= f.label 'Kundennummer SAP' %>
-              </h5>
-              <%= f.text_field :customer_id_sap, class: 'form-control' %>
-            </div>
-            <div class="field">
-              <h5>
-                 <%= f.label 'Kundenname' %>
-              </h5>
-              <%= f.text_field :name, class: 'form-control' %>
-            </div>
-            <div class="field">
-              <h5>
-                <%= f.label 'Kundenbeschreibung' %>
-              </h5>
-              <%= f.text_field :description, class: 'form-control' %>
-            </div>
-            <br>
-            <br>
-            <%= f.submit "Erstellen", class: 'btn btn-primary' %>
-          <% end %><br>
+
       </div>
     </div>
   </div>

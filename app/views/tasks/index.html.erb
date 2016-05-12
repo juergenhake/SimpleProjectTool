@@ -1,9 +1,11 @@
 <%= render partial: '/shared/header', locals: {section: @project.customer.component.name + " > " + @project.customer.name + " > " + @project.title + " > Alle Aufgaben", back: true} %>
+<%= render partial: '/project_items/modal/newProjectItem' %>
 <div class="row">
   <div class="col-md-12" align="right">
-    <%= link_to new_project_item_path(project: @project), :class => "btn btn-primary", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Neue Aufgabe anlegen"  do %>
-     Neue Aufgabe
-    <% end %>
+   <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newProjectItem">
+      Neue Aufgabe
+    </button>
   </div>
 </div>
 <br>
@@ -24,7 +26,12 @@
               <td><%=item.id%></td>
               <td><%=item.title%></td>
               <td><%=item.description%></td>
-              <td><%=item.user%></td>
+              <% if item.user.blank? %>
+                <td></td>
+              <% else %>
+                <td><%=item.user.first_name%> <%=item.user.last_name%></td>
+              <% end %>
+
               <td><%=item.start.strftime("%d.%m.%Y")%></td>
               <td><%=item.end.strftime("%d.%m.%Y")%></td>
               <% if item.finished.blank? %>
@@ -33,7 +40,7 @@
                 <td><%=item.finished.strftime("%d.%m.%Y")%></td>
               <% end %>
               <td>
-                <% if item.finished.blank? %>
+                <% if (item.finished.blank? && item.user == current_user) %>
                   <%= link_to finished_project_item_path(item), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Aufgabe erledigt" do %>
                     <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                   <%end%>

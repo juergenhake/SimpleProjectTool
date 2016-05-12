@@ -4,7 +4,7 @@ class CreateProjects < ActiveRecord::Migration
       t.string :title
       t.string :description
       t.references :customer, index: true
-      t.references :projectItem, index: true
+      t.references :task, index: true
       t.timestamps null: false
     end
   end

@@ -13,6 +13,8 @@
  *= require_tree .
  *= require_self
  *= require bootstrap-datepicker3
+ *= require select2-bootstrap
+
 
  */
 @import "bootstrap-sprockets";
@@ -38,3 +40,31 @@
   padding-top: 10px;
   padding-left: 5px!important;
 }
+
+.dropdown_element {
+  display: block;
+padding: 3px 20px;
+clear: both;
+font-weight: normal;
+line-height: 1.42857;
+color: #333;
+white-space: nowrap;
+}
+
+.dropdown_element:hover {
+  text-decoration: none;
+    text-decoration-color: -moz-use-text-color;
+    text-decoration-line: none;
+    text-decoration-style: solid;
+color: #262626;
+background-color: #F5F5F5;
+}
+
+.fixed-panel {
+  overflow-y: scroll;
+  height: 300px;
+  width: 100%;
+  position: absolute;
+}
+
+

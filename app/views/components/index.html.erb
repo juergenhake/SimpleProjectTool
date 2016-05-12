@@ -1,9 +1,13 @@
-<%= render partial: '/shared/header', locals: {section: "Alle Bauteile", back: false} %>
+<%= render partial: '/components/modal/newComponent' %>
+<div class="page-header">
+  <h1>Alle Bauteile</h1>
+</div>
 <div class="row">
   <div class="col-md-12" align="right">
-    <%= link_to new_component_path, :class => "btn btn-primary", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Neues Bauteil anlegen"  do %>
-     Neues Bauteil
-    <% end %>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newComponent">
+      Neues Bauteil
+    </button>
   </div>
 </div>
 <br>
@@ -23,7 +27,7 @@
               <td><%=component.name%></td>
               <td><%=component.description%></td>
               <td>
-                <%= link_to customer_index_path(component: component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Bauteil öffnen" do %>
+                <%= link_to component_path(component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Bauteil öffnen" do %>
                   <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
                 <%end%>
                 <%= link_to edit_component_path(component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Bauteil ändern" do %>

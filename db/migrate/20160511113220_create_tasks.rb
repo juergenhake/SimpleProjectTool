@@ -1,6 +1,6 @@
-class CreateProjectItems < ActiveRecord::Migration
+class CreateTasks < ActiveRecord::Migration
   def change
-    create_table :project_items do |t|
+    create_table :tasks do |t|
       t.string :title
       t.string :description
       t.datetime :start
@@ -9,6 +9,9 @@ class CreateProjectItems < ActiveRecord::Migration
       t.string :user
       t.timestamps null: false
       t.references :project, index: true
+      t.references :user, index: true
+      t.references :attachments, index: true
+      t.references :historys, index: true
     end
   end
 end

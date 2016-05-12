@@ -1,11 +1,16 @@
 class CustomerController < ApplicationController
-  before_action :find_customer, only: [:edit, :destroy, :update]
-  before_action :find_component, only: [:index, :edit, :destroy, :new]
+  before_action :find_customer, only: [:edit, :destroy, :update, :show]
+  before_action :find_component, only: [:edit, :destroy, :new]
   def index
-    @customers = @component.customers
+    @customers = Customer.all
+    @newCustomer = Customer.new
   end
 
   def show
+    @newHistory = History.new
+    @newFile = Attachment.new
+    @files = @customer.attachments.paginate(:page => params[:filepage])
+    @projects = @customer.projects.paginate(:page => params[:projectpage])
   end
 
   def create
@@ -45,10 +50,12 @@ class CustomerController < ApplicationController
     @customer = Customer.new
   end
 
+
+
   private
 
   def customer_params
-    params.require(:customer).permit(:customer_id_sap, :description, :name, :component_id)
+    params.require(:customer).permit(:customer_id_sap, :description, :name)
   end
 
   def find_customer
