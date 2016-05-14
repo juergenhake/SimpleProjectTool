@@ -6,6 +6,10 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu">
+    <%= link_to root_path, :class => "dropdown_element" do%>
+    <li>Meine Seite</li>
+    <% end %>
+    <li role="separator" class="divider"></li>
     <%= link_to edit_user_registration_path, :class => "dropdown_element" do%>
     <li>Profil bearbeiten</li>
     <% end %>

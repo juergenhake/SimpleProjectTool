@@ -10,7 +10,11 @@ Rails.application.routes.draw do
   resources :attachment
   get '/task/:id', to: 'tasks#finished', as: 'finished_task'
   post '/component/:id/addCustomer', to: 'components#addCustomer', as: 'addCustomer'
-  post '/component/:id/addProject', to: 'components#addProject', as: 'addProject'
+  post '/component/:id/addProject', to: 'components#addProject', as: 'addProjectToComponent'
+
+  post '/customer/:id/addProject', to: 'customer#addProject', as: 'addProjectToCustomer'
+  post '/customer/:id/addComponent', to: 'customer#addComponent', as: 'addComponentToCustomer'
+
   root 'startpage#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

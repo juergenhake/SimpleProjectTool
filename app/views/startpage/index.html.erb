@@ -1,56 +1,76 @@
 <div class="page-header">
   <h1>Hallo <%= current_user.first_name %> <%= current_user.last_name %>, <small>hier dein Dashboard</small></h1>
 </div>
-<div class="col-md-4">
-  <div class="panel panel-default">
-    <div class="panel-heading">Deine offenen Aufgaben</div>
-    <div class="panel-body">
-      <div class="row">
-          <div class="col-md-12">
-            <table class="table table-hover">
-              <tr>
-                <th>Projekt</th>
-                <th>Titel</th>
-                <th>Beschreibung</th>
-                <th>Ende</th>
-              </tr>
-              <% @items.each do |item| %>
-                  <tr onclick="location.href='<%= task_path(item) %>'">
-                      <td><%=item.project.title%></td>
-                      <td><%=item.title%></td>
-                      <td><%=item.description%></td>
-                      <td><%=item.end.strftime("%d.%m.%Y")%></td>
-                  </tr>
-              <%end%>
-            </table>
-          </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        Deine offenen Aufgaben
       </div>
+      <% if @items.count > 0 %>
+        <table class="table table-hover">
+          <tr>
+            <th>#</th>
+            <th>Aufgabe</th>
+            <th>geplanter Start</th>
+            <th>geplantes Ende</th>
+            <th>Projekt</th>
+          </tr>
+          <% @items.each do |item| %>
+              <tr>
+                  <td><%= link_to task_path(item), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Aufgabe öffnen" do%><%=item.id %><% end %></td>
+                  <td><%=item.title%></td>
+                  <td><%=item.start.strftime("%d.%m.%Y")%></td>
+                  <td><%=item.end.strftime("%d.%m.%Y")%></td>
+                  <td><%=item.project.title%></td>
+              </tr>
+          <%end%>
+        </table>
+      <% else %>
+        <div class="panel-body">
+          Keine offenen Aufgaben gefunden!
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
-<div class="col-md-4">
-  <div class="panel panel-default">
-    <div class="panel-heading">Deine Projekte</div>
-    <div class="panel-body">
-      <div class="row">
-          <div class="col-md-12">
-            <table class="table table-hover">
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">Deine Projekte</div>
+      <% if @projects.count > 0 %>
+        <table class="table table-hover">
+          <tr>
+            <th>#</th>
+            <th>Titel</th>
+            <th>Fortschritt</th>
+          </tr>
+          <tbody>
+            <% @projects.each do |project| %>
               <tr>
-                <th>Titel</th>
-                <th>Beschreibung</th>
+                  <td>
+                  <%= link_to project_path(project), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Projekt öffnen" do %>
+                    <%=project.id%>
+                  <% end %>
+                  </td>
+                  <td><%=project.title%></td>
+                  <td>
+                  <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="<%=project.progress%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=project.progress%>%;">
+                      <%=project.progress%>%
+                    </div>
+                  </div>
+                </td>
               </tr>
-              <tbody>
-                <% @projects.each do |project| %>
-                  <tr onclick="location.href='<%= project_path(project) %>'">
-                      <td><%=project.title%></td>
-                      <td><%=project.description%></td>
-                  </tr>
-                <%end%>
-              </tbody>
+            <%end%>
+          </tbody>
 
-            </table>
-          </div>
-      </div>
+        </table>
+      <% else %>
+        <div class="panel-body">
+          Keine offenen Projekte gefunden!
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,6 +1,8 @@
 <%= render partial: '/customer/modal/newHistory' %>
 <%= render partial: '/customer/modal/newAttachment' %>
-<%= render partial: '/shared/flash_message'%>
+<%= render partial: '/customer/modal/addProject' %>
+<%= render partial: '/customer/modal/addComponent' %>
+<%= render partial: '/customer/modal/editCustomer' %>
 <div class="page-header">
   <h1>Kunde <%= @customer.id %>, <small><%= @customer.name %></small></h1>
 </div>
@@ -14,12 +16,15 @@
 
 <div class="row">
     <div class="col-md-12">
-      <div class="col-md-3">
-        <div class="panel panel-default">
+      <div class="col-md-4">
+        <div class="panel panel-primary">
           <div class="panel-heading">
+            <%= link_to 'Edit Customer', 'data-toggle'=> "modal",'data-target' => '#editCustomer', title: "Kunde editieren" do %>
+                <span class="glyphicon glyphicon-pencil pull-right" style="color:white" aria-hidden="true"></span>
+              <% end %>
             <h3 class="panel-title">Kunde-Details</h3>
           </div>
-          <table class="table table-hover">
+          <table class="table table-striped">
             <tr>
               <th>Kundennummer SAP</th>
             </tr>
@@ -30,31 +35,42 @@
               <th>Kunden-Beschreibung</th>
             </tr>
             <tr>
-              <td><%=@customer.description%></td>
+              <td><%=simple_format(@customer.description)%></td>
             </tr>
           </table>
         </div>
       </div>
 
-      <div class="col-md-3">
-        <div class="panel panel-default">
+      <div class="col-md-4">
+        <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">Projekte zum Kunde</h3>
+            <%= link_to 'Add Project', 'data-toggle'=> "modal",'data-target' => '#addProjectToCustomer', title: "Projekt hinzufügen" do %>
+                <span class="glyphicon glyphicon-plus pull-right" style="color:white" aria-hidden="true"></span>
+            <% end %>
+            <h3 class="panel-title">Projekte</h3>
           </div>
           <% if @projects.blank? %>
             Keine Projekte gefunden!
           <% else %>
-            <table class="table table-hover">
+            <table class="table table-striped">
               <tr>
                 <th>#</th>
                 <th>Title</th>
                 <th>Beschreibung</th>
+                <th>Fortschritt</th>
               </tr>
               <% @projects.each do |project| %>
                   <tr>
-                    <td><%=project.id%></td>
+                    <td><%= link_to project_path(project), title: "zum Projekt " + project.title do %> <%=project.id%> <% end %></td>
                     <td><%=project.title%></td>
                     <td><%=project.description%></td>
+                    <td>
+                      <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="<%=project.progress%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=project.progress%>%;">
+                          <%=project.progress%>%
+                        </div>
+                      </div>
+                    </td>
                   </tr>
               <%end%>
             </table>
@@ -66,9 +82,47 @@
           <% end %>
         </div>
       </div>
+      <div class="col-md-4">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <%= link_to 'Add Component', 'data-toggle'=> "modal",'data-target' => '#addComponentToCustomer', title: "Bauteil hinzufügen" do %>
+                <span class="glyphicon glyphicon-plus pull-right" style="color:white" aria-hidden="true"></span>
+            <% end %>
+            <h3 class="panel-title">Bauteile</h3>
+          </div>
+          <% if @components.blank? %>
+            Keine Bauteile gefunden!
+          <% else %>
+            <table class="table table-striped">
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Beschreibung</th>
+              </tr>
+              <% @components.each do |component| %>
+                  <tr>
+                    <td><%= link_to component_path(component), title: "zum Bauteil " + component.name do %> <%=component.id%> <% end %></td>
+                    <td><%=component.name%></td>
+                    <td><%=component.description%></td>
+                  </tr>
+              <%end%>
+            </table>
+            <% if @components.count/10 > 1 %>
+              <div class="panel-footer">
+                <%= will_paginate @projects, renderer: BootstrapPagination::Rails, :param_name => 'componentpage' %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
 
-      <div class="col-md-6">
-        <div class="panel panel-default">
+
+</div>
+<div class="row">
+  <div <div class="col-md-12">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Hochgeladene Dateien zum Kunden</h3>
           </div>
@@ -106,12 +160,8 @@
           <% end %>
         </div>
       </div>
-    </div>
-</div>
-<div class="row">
-  <div <div class="col-md-12">
-      <div class="col-md-12">
-        <div class="panel panel-default">
+      <div class="col-md-6">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Logbuch</h3>
           </div>
@@ -119,9 +169,8 @@
             <% if @customer.historys.blank? %>
               Keine Kommentare gefunden!
             <% else %>
-              <table class="table">
+              <table class="table table-striped">
                 <% @customer.historys.each do |history| %>
-                  <thead>
                     <tr>
                       <% if history.systemflag %>
                         <th>System schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
@@ -129,12 +178,9 @@
                         <th><%= history.user.first_name %> <%= history.user.last_name %> schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
                       <% end %>
                     </tr>
-                  </thead>
-                  <tbody>
                     <tr>
-                      <td><%=history.message%></td>
+                      <td><%=simple_format(history.message)%></td>
                     </tr>
-                  </tbody>
                 <%end%>
               </table>
             <% end %>

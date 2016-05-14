@@ -1,12 +1,12 @@
-<div class="modal fade" id="newProject" tabindex="-1" role="dialog">
+<div class="modal fade" id="editProject" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Projekt erstellen</h4>
+        <h4 class="modal-title">Projekt bearbeiten</h4>
       </div>
       <div class="modal-body">
-        <%= form_for @newProject, url: {action: "create"} do |f| %>
+        <%= form_for @project, url: {action: "update"} do |f| %>
             <%= f.hidden_field :type, value: "Sonstige"  %>
             <div class="field">
               <h5>
@@ -24,7 +24,7 @@
               <h5>
                  <%= f.label 'Projektleiter' %>
               </h5>
-              <%= f.select :user_id, options_from_collection_for_select(User.all, :id, :last_name, :id), {}, {:multiple => false, :class => "multiselect2", :style => "width:200px;" } %>
+              <%= f.select :user_id, options_from_collection_for_select(User.all, :id, :first_and_lastname, @project.user.id), {}, {:multiple => false, :class => "multiselect2", :style => "width:200px;" } %>
             </div>
             <div class="field">
               <h5>

@@ -51,9 +51,9 @@ class ProjectController < ApplicationController
 
   def update
     if @project.update(project_params)
-      redirect_to project_index_path(customer: @project.customer), notice: 'Projekt wurde erfolgreich aktualisiert.'
+      redirect_to project_path(@project), success: 'Projekt wurde erfolgreich aktualisiert.'
     else
-      redirect_to project_index_path(customer: @project.customer), alert: 'Projekt wurde nicht aktualisiert.'
+      redirect_to project_path(@project), alert: 'Projekt wurde nicht aktualisiert.'
     end
   end
 

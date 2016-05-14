@@ -1,27 +1,35 @@
 <%= render partial: '/project/modal/newHistory' %>
 <%= render partial: '/project/modal/newAttachment' %>
 <%= render partial: '/project/modal/newProjectItem' %>
-<%= render partial: '/shared/flash_message'%>
+<%= render partial: '/project/modal/editProject' %>
 <div class="page-header">
   <h1>Projekt <%= @project.id %>, <small><%= @project.title %></small></h1>
 </div>
 
-<div class="page-header">
-  <ul class="nav nav-pills">
-    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newHistory">Neuer Kommentar</a></li>
-    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newAttachment">Datei anhängen</a></li>
-    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newProjectItem">Neue Aufgabe</a></li>
-  </ul>
-</div>
+<% if @project.finished_flag == false || current_user == @project.user %>
+  <div class="page-header">
+    <ul class="nav nav-pills">
+      <li role="presentation"><a href="#" data-toggle="modal" data-target="#newHistory">Neuer Kommentar</a></li>
+      <li role="presentation"><a href="#" data-toggle="modal" data-target="#newAttachment">Datei anhängen</a></li>
+      <li role="presentation"><a href="#" data-toggle="modal" data-target="#newProjectItem">Neue Aufgabe</a></li>
+      <% if @project.finished_flag %>
+        <li role="presentation"><a href="#" data-toggle="modal" data-target="#newProjectItem">Abschluss Kommentar</a></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 
 <div class="row">
     <div class="col-md-12">
       <div class="col-md-3">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
+            <%= link_to 'Edit Project', 'data-toggle'=> "modal",'data-target' => '#editProject', title: "Projekt editieren" do %>
+                <span class="glyphicon glyphicon-pencil pull-right" style="color:white" aria-hidden="true"></span>
+              <% end %>
             <h3 class="panel-title">Projekt-Details</h3>
           </div>
-          <table class="table table-hover">
+          <table class="table table-striped">
             <tr>
               <th>Projektleiter</th>
             </tr>
@@ -36,7 +44,7 @@
               <th>Projekt-Beschreibung</th>
             </tr>
             <tr>
-              <td><%=@project.description%></td>
+              <td><%=simple_format(@project.description)%></td>
             </tr>
              <tr>
               <th>Reklamation Lieferant</th>
@@ -55,7 +63,7 @@
       </div>
 
       <div class="col-md-3">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <% if @project.customer.present? %>
               <h3 class="panel-title">Kunden Details</h3>
@@ -74,7 +82,11 @@
                   <th>Kundennummer</th>
                 </tr>
                 <tr>
-                  <td><%=@project.customer.id%></td>
+                  <td>
+                     <%= link_to customer_path(@project.customer), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Kunden " + @project.customer.name do %>
+                      <%=@project.customer.id%>
+                    <% end %>
+                  </td>
                 </tr>
                 <tr>
                   <th>Kundenname</th>
@@ -92,14 +104,18 @@
                   <th>Kundennummer Beschreibung</th>
                 </tr>
                 <tr>
-                  <td><%=@project.customer.description%></td>
+                  <td><%=simple_format(@project.customer.description)%></td>
                 </tr>
               <% elsif @project.component.present? %>
                 <tr>
                   <th>Bauteilnummer</th>
                 </tr>
                 <tr>
-                  <td><%=@project.component.id%></td>
+                  <td>
+                    <%= link_to component_path(@project.component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Bauteil " + @project.component.name do %>
+                      <%=@project.component.id%>
+                    <% end %>
+                  </td>
                 </tr>
                 <tr>
                   <th>Bezeichnung</th>
@@ -117,7 +133,7 @@
                   <th>Bauteil Beschreibung</th>
                 </tr>
                 <tr>
-                  <td><%=@project.component.description%></td>
+                  <td><%=simple_format(@project.component.description)%></td>
                 </tr>
               <% end %>
             </table>
@@ -126,7 +142,7 @@
       </div>
 
       <div class="col-md-6">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Hochgeladene Dateien</h3>
           </div>
@@ -169,7 +185,7 @@
 <div class="row">
   <div <div class="col-md-12">
       <div class="col-md-6">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Aufgaben</h3>
           </div>
@@ -178,18 +194,34 @@
           <% else %>
             <table class="table table-hover">
               <tr>
+                <th></th>
                 <th>Titel</th>
                 <th>Startdatum</th>
                 <th>Enddatum</th>
+                <th> Erledigt am</th>
                 <th>Verantwortlicher</th>
               </tr>
               <% @project.tasks.each do |item| %>
                 <tr>
                   <td>
-                    <%= link_to task_path(item) do%><%=item.title %><% end %>
+                    <% if item.finished.present? %>
+                      <span class="glyphicon glyphicon-ok" aria-hidden="true" style="color:green" aria-label="Erledigt" data-toggle="tooltip" data-placement="left" title="Aufgabe erledigt"></span>
+                    <% else %>
+                      <span class="glyphicon glyphicon-remove" aria-hidden="true" style="color:red" aria-label="Erledigt" data-toggle="tooltip" data-placement="left" title="Aufgabe nicht erledigt"></span>
+                    <% end %>
+                  </td>
+                  <td>
+                    <%= link_to task_path(item), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Aufgabe öffnen" do%><%=item.title %><% end %>
                   </td>
                   <td><%=item.start.strftime("%d.%m.%Y")%></td>
                   <td><%=item.end.strftime("%d.%m.%Y")%></td>
+                  <td>
+                    <% if item.finished.present? %>
+                      <%=item.finished.strftime("%d.%m.%Y")%>
+                    <% else %>
+                      -
+                    <% end %>
+                  </td>
                   <td><%=item.user.first_name%> <%=item.user.last_name%></td>
                 </tr>
 
@@ -199,7 +231,7 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Logbuch</h3>
           </div>
@@ -207,9 +239,8 @@
             <% if @project.historys.blank? %>
               Keine Kommentare gefunden!
             <% else %>
-              <table class="table">
+              <table class="table table-striped">
                 <% @project.historys.each do |history| %>
-                  <thead>
                     <tr>
                       <% if history.systemflag %>
                         <th>System schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
@@ -217,12 +248,9 @@
                         <th><%= history.user.first_name %> <%= history.user.last_name %> schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
                       <% end %>
                     </tr>
-                  </thead>
-                  <tbody>
                     <tr>
-                      <td><%=history.message%></td>
+                      <td><%=simple_format(history.message)%></td>
                     </tr>
-                  </tbody>
                 <%end%>
               </table>
             <% end %>

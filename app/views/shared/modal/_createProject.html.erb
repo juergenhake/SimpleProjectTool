@@ -1,4 +1,4 @@
-<div class="modal fade" id="newProject" tabindex="-1" role="dialog">
+<div class="modal fade" id="createProject" tabindex="-1" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -6,7 +6,11 @@
         <h4 class="modal-title">Projekt erstellen</h4>
       </div>
       <div class="modal-body">
-        <%= form_for @newProject, url: {action: "create"} do |f| %>
+        <% controller = "project" %>
+        <% if (current_page?(new_user_session_path) || current_page?(destroy_user_session_path) || current_page?(edit_user_registration_path) || current_page?(new_user_registration_path)) %>
+          <% controller = "/project" %>
+        <% end %>
+          <%= form_for @newProject, url: {controller: controller, action: "create"} do |f| %>
             <%= f.hidden_field :type, value: "Sonstige"  %>
             <div class="field">
               <h5>

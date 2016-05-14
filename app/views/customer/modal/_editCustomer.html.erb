@@ -1,0 +1,36 @@
+<div class="modal fade" id="editCustomer" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Kunde editieren</h4>
+      </div>
+      <div class="modal-body">
+        <%= form_for @customer, url: {action: "update"} do |f| %>
+            <div class="field">
+              <h5>
+               <%= f.label 'Kundennummer SAP' %>
+              </h5>
+              <%= f.text_field :customer_id_sap, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                 <%= f.label 'Kundenname' %>
+              </h5>
+              <%= f.text_field :name, class: 'form-control' %>
+            </div>
+            <div class="field">
+              <h5>
+                <%= f.label 'Kundenbeschreibung' %>
+              </h5>
+              <%= f.text_area :description, class: 'form-control' %>
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <%= f.submit "Ändern", class: 'btn btn-primary' %>
+        <% end %><br>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
