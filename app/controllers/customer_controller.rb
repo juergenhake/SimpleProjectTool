@@ -1,5 +1,5 @@
 class CustomerController < ApplicationController
-  before_action :find_customer, only: [:edit, :destroy, :update, :show, :addProject]
+  before_action :find_customer, only: [:edit, :destroy, :update, :show, :addProject, :addComponent]
 
   def index
     @customers = Customer.all
@@ -23,6 +23,7 @@ class CustomerController < ApplicationController
 
     respond_to do |format|
       if @customer.save
+        add_History_from_customer(@customer)
         format.html { redirect_to customer_index_path(component: customer_params[:component_id]), success: 'Kunde wurde erfolgreich erstellt.' }
         format.json { render :show, status: :created, location: @customer }
       else
@@ -45,9 +46,9 @@ class CustomerController < ApplicationController
 
   def update
     if @customer.update(customer_params)
-      redirect_to customer_index_path(component: customer_params[:component_id]), notice: 'Kunde wurde erfolgreich aktualisiert.'
+      redirect_to customer_path(@customer), success: 'Kunde wurde erfolgreich aktualisiert.'
     else
-      redirect_to customer_index_path, alert: 'Kunde wurde nicht aktualisiert.'
+      redirect_to customer_path(@customer), alert: 'Kunde wurde nicht aktualisiert.'
     end
   end
 
@@ -78,7 +79,7 @@ class CustomerController < ApplicationController
   private
 
   def customer_params
-    params.require(:customer).permit(:customer_id_sap, :description, :name, :project_id, :customer_id, :component_id)
+    params.require(:customer).permit(:customer_id_sap, :description, :name, :projects_id, :customer_id, :component_id)
   end
 
   def find_customer

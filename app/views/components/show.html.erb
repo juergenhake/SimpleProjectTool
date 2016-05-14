@@ -2,6 +2,7 @@
 <%= render partial: '/components/modal/newAttachment' %>
 <%= render partial: '/components/modal/addCustomer' %>
 <%= render partial: '/components/modal/addProject' %>
+<%= render partial: '/components/modal/editComponent' %>
 
 <div class="page-header">
   <h1>Bauteil <%= @component.id %>, <small><%= @component.name %></small></h1>
@@ -9,19 +10,22 @@
 
 <div class="page-header">
   <ul class="nav nav-pills">
-    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newHistory">Neuer Kommentar</a></li>
-    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newAttachment">Datei anhängen</a></li>
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newHistoryInComponent">Neuer Kommentar</a></li>
+    <li role="presentation"><a href="#" data-toggle="modal" data-target="#newAttachmentinComponent">Datei anhängen</a></li>
   </ul>
 </div>
 
 <div class="row">
     <div class="col-md-12">
       <div class="col-md-4">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
+            <%= link_to 'Edit Component', 'data-toggle'=> "modal",'data-target' => '#editComponent', title: "Bauteil editieren" do %>
+                <span class="glyphicon glyphicon-pencil pull-right" style="color:white" aria-hidden="true"></span>
+              <% end %>
             <h3 class="panel-title">Bauteil-Details</h3>
           </div>
-          <table class="table table-hover">
+          <table class="table table-striped">
             <tr>
               <th>Bauteilnummer SAP</th>
             </tr>
@@ -32,17 +36,17 @@
               <th>Bauteil-Beschreibung</th>
             </tr>
             <tr>
-              <td><%=@component.description%></td>
+              <td><%=simple_format(@component.description)%></td>
             </tr>
           </table>
         </div>
       </div>
 
       <div class="col-md-4">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
               <%= link_to 'Add Project', 'data-toggle'=> "modal",'data-target' => '#addProjectToComponent', title: "Projekt hinzufügen" do %>
-                <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-plus pull-right" style="color:white" aria-hidden="true"></span>
               <% end %>
               <h3 class="panel-title">Offene Projekte</h3>
 
@@ -50,7 +54,7 @@
           <% if @projects.blank? %>
             Keine Projekte gefunden!
           <% else %>
-            <table class="table table-hover">
+            <table class="table table-striped">
               <tr>
                 <th>#</th>
                 <th>Titel</th>
@@ -60,7 +64,13 @@
                   <tr>
                     <td><%= link_to project_path(project), title: "zum Projekt " + project.title do %> <%=project.id%> <% end %></td>
                     <td><%=project.title%></td>
-                    <td>Wird noch implementiert!</td>
+                    <td>
+                      <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="<%=project.progress%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=project.progress%>%;">
+                          <%=project.progress%>%
+                        </div>
+                      </div>
+                    </td>
                   </tr>
               <%end%>
             </table>
@@ -74,19 +84,19 @@
       </div>
 
       <div class="col-md-4">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
 
               <%= link_to 'Add Customer', 'data-toggle'=> "modal",'data-target' => '#addCustomerToComponent', title: "Kunde hinzufügen" do %>
-                <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span></a>
+                <span class="glyphicon glyphicon-plus pull-right" style="color:white" aria-hidden="true"></span></a>
               <% end %>
-              <h3 class="panel-title">Kunden welche das Bauteil nutzen</h3>
+              <h3 class="panel-title">Kunden</h3>
 
           </div>
           <% if @customers.blank? %>
             Keine Kunden gefunden!
           <% else %>
-            <table class="table table-hover">
+            <table class="table table-striped">
               <tr>
                 <th>#</th>
                 <th>Kundennummer SAP</th>
@@ -117,7 +127,7 @@
 <div class="row">
   <div <div class="col-md-12">
     <div class="col-md-6">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Hochgeladene Dateien zum Bauteil</h3>
           </div>
@@ -156,7 +166,7 @@
         </div>
       </div>
       <div class="col-md-6">
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
           <div class="panel-heading">
             <h3 class="panel-title">Logbuch</h3>
           </div>
@@ -164,9 +174,8 @@
             <% if @component.historys.blank? %>
               Keine Kommentare gefunden!
             <% else %>
-              <table class="table">
+              <table class="table table-striped">
                 <% @component.historys.each do |history| %>
-                  <thead>
                     <tr>
                       <% if history.systemflag %>
                         <th>System schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
@@ -174,12 +183,9 @@
                         <th><%= history.user.first_name %> <%= history.user.last_name %> schrieb am <%=history.created_at.strftime("%d.%m.%Y %H:%M:%S") %></th>
                       <% end %>
                     </tr>
-                  </thead>
-                  <tbody>
                     <tr>
-                      <td><%=history.message%></td>
+                      <td><%=simple_format(history.message)%></td>
                     </tr>
-                  </tbody>
                 <%end%>
               </table>
             <% end %>

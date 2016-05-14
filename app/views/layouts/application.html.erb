@@ -26,6 +26,10 @@
               <%= link_to project_index_path, :class => "dropdown_element" do%>
               <li>Alle Projekte</li>
               <% end %>
+              <li role="separator" class="divider"></li>
+              <%= link_to 'Create Component', 'data-toggle'=> "modal",'data-target' => '#createProject', :class => "dropdown_element" do %>
+                <li>Projekt anlegen</li>
+              <% end %>
             </ul>
           </li>
         </ul>
@@ -76,6 +80,7 @@
     <%= render partial: '/shared/flash_message'%>
     <%= render partial: '/shared/modal/createComponent' %>
     <%= render partial: '/shared/modal/createCustomer' %>
+    <%= render partial: '/shared/modal/createProject' %>
     <%= yield %>
   </div>
 </body>

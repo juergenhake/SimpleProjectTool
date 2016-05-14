@@ -15,6 +15,7 @@ class TasksController < ApplicationController
     respond_to do |format|
       if @item.save
         add_History_from_task(@item)
+        Projectprogress(@item.project)
         format.html { redirect_to project_path(@project), success: 'Aufgabe wurde erfolgreich erstellt.' }
         format.json { render :show, status: :created, location: @item }
       else
@@ -50,6 +51,7 @@ class TasksController < ApplicationController
   def finished
     @item.finished = Time.now
     if @item.save
+      Projectprogress(@item.project)
       add_History_from_task(@item,"Die Aufgabe wurde von " + current_user.first_name + " " + current_user.last_name + " als erledigt markiert.")
       redirect_to project_path(@item.project), notice: 'Aufgabe wurde erfolgreich aktualisiert.'
     else

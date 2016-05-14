@@ -50,9 +50,9 @@ class ComponentsController < ApplicationController
 
   def update
     if @component.update(component_params)
-      redirect_to components_path, notice: 'Bauteil wurde erfolgreich aktualisiert.'
+      redirect_to component_path(@component), success: 'Bauteil wurde erfolgreich aktualisiert.'
     else
-      redirect_to components_path, alert: 'Bauteil wurde nicht aktualisiert.'
+      redirect_to component_path(@component), alert: 'Bauteil wurde nicht aktualisiert.'
     end
   end
 

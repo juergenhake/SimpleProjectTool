@@ -6,7 +6,11 @@
         <h4 class="modal-title">Kunde erstellen</h4>
       </div>
       <div class="modal-body">
-        <%= form_for @newCustomer, url: {controller: "customer", action: "create"} do |f| %>
+        <% controller = "customer" %>
+        <% if (current_page?(new_user_session_path) || current_page?(destroy_user_session_path) || current_page?(edit_user_registration_path) || current_page?(new_user_registration_path)) %>
+          <% controller = "/customer" %>
+        <% end %>
+        <%= form_for @newCustomer, url: {controller: controller, action: "create"} do |f| %>
             <div class="field">
               <h5>
                <%= f.label 'Kundennummer SAP' %>

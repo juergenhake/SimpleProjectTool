@@ -7,7 +7,7 @@
       </div>
       <% if @addprojects.count > 0 %>
       <div class="modal-body">
-        <%= form_for @addProject, url: {controller: "customers", action: "addProject"} do |f| %>
+        <%= form_for @addProject, url: {controller: "customer", action: "addProject"} do |f| %>
             <%= f.hidden_field :customer_id, value: @customer.id %>
             <div class="field">
               <h5>

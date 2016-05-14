@@ -12,8 +12,9 @@ Rails.application.routes.draw do
   post '/component/:id/addCustomer', to: 'components#addCustomer', as: 'addCustomer'
   post '/component/:id/addProject', to: 'components#addProject', as: 'addProjectToComponent'
 
-  post '/customer/:id/addProject', to: 'customers#addProject', as: 'addProjectToCustomer'
-  post '/customer/:id/addComponent', to: 'customers#addComponent', as: 'addComponentToCustomer'
+  post '/customer/:id/addProject', to: 'customer#addProject', as: 'addProjectToCustomer'
+  post '/customer/:id/addComponent', to: 'customer#addComponent', as: 'addComponentToCustomer'
+
   root 'startpage#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
