@@ -6,6 +6,13 @@ class TasksController < ApplicationController
     @newHistory = History.new
     @newFile = Attachment.new
     @files = @item.attachments.paginate(:page => params[:filepage])
+    @projectfiles = @item.project.attachments.paginate(:page => params[:projectfilepage])
+    if @item.project.customer.present?
+      @customerfiles = @item.project.customer.attachments.paginate(:page => params[:customerfilepage])
+    end
+    if @item.project.component.present?
+      @componentfiles = @item.project.component.attachments.paginate(:page => params[:componentfilepage])
+    end
   end
 
   def create

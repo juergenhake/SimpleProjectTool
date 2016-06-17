@@ -30,13 +30,31 @@
               </h5>
               <%= f.select :user_id, options_from_collection_for_select(User.all, :id, :last_name, :id), {}, {:multiple => false, :class => "multiselect2", :style => "width:200px;" } %>
             </div>
-            <div class="field">
+             <div class="field">
+              <h5>
+                 <%= f.label 'Projekttyp' %>
+              </h5>
+              <%= f.select :type, Project.types.map { |key, value| [key.humanize, key] }, {},{:style => "width:200px;", :class => "cProject_type"} %>
+            </div>
+            <div class="field" id="p_customer" style="display:none">
+                <h5>
+                   <%= f.label 'Kunde' %>
+                </h5>
+                  <%= f.select :customer_id, options_from_collection_for_select(Customer.all, :id, :name, :id), {}, {:multiple => false, :class => "multiselect2", :style => "width:200px;" } %>
+              </div>
+            <div class="field" id="p_component">
+                <h5>
+                   <%= f.label 'Artikel' %>
+                </h5>
+                  <%= f.select :component_id, options_from_collection_for_select(Component.all, :id, :name, :id), {}, {:multiple => false, :class => "multiselect2", :style => "width:200px;" } %>
+            </div>
+            <div class="field" id="p_reknr" style="display:none">
               <h5>
                  <%= f.label 'Reklamation Lieferant' %>
               </h5>
               <%= f.text_field :reklamation_lief, class: 'form-control' %>
             </div>
-            <div class="field">
+            <div class="field" id="p_lsnr" style="display:none">
               <h5>
                  <%= f.label 'Lieferscheinnummer' %>
               </h5>

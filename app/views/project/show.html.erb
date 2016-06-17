@@ -46,17 +46,33 @@
             <tr>
               <td><%=simple_format(@project.description)%></td>
             </tr>
+            <% if @project.reklamation_lief.present? %>
+               <tr>
+                <th>Reklamation Lieferant</th>
+              </tr>
+              <tr>
+                <td><%=@project.reklamation_lief%></td>
+              </tr>
+            <% end %>
+            <% if @project.lief_nr.present? %>
+               <tr>
+                <th>Lieferscheinnummer</th>
+              </tr>
+              <tr>
+                <td><%=@project.lief_nr%></td>
+              </tr>
+            <% end %>
              <tr>
-              <th>Reklamation Lieferant</th>
+              <th> Fortschritt </th>
             </tr>
             <tr>
-              <td><%=@project.reklamation_lief%></td>
-            </tr>
-             <tr>
-              <th>Lieferscheinnummer</th>
-            </tr>
-            <tr>
-              <td><%=@project.lief_nr%></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="<%=@project.progress%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=@project.progress%>%;">
+                    <%=@project.progress%>%
+                  </div>
+                </div>
+              </td>
             </tr>
           </table>
         </div>
@@ -65,79 +81,99 @@
       <div class="col-md-3">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <% if @project.customer.present? %>
-              <h3 class="panel-title">Kunden Details</h3>
-            <% elsif @project.component.present? %>
-              <h3 class="panel-title">Bauteil Deatails</h3>
-            <% else %>
-              <h3 class="panel-title">Keine Zuordnung!</h3>
-            <% end %>
+              <h3 class="panel-title">Details zu:</h3>
           </div>
           <% if (@project.component.blank? && @project.customer.blank?) %>
             Keine Zuordnung gefunden!
           <% else %>
-            <table class="table table-hover">
+            <ul class="nav nav-tabs" role="tablist">
               <% if @project.customer.present? %>
-                <tr>
-                  <th>Kundennummer</th>
-                </tr>
-                <tr>
-                  <td>
-                     <%= link_to customer_path(@project.customer), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Kunden " + @project.customer.name do %>
-                      <%=@project.customer.id%>
-                    <% end %>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Kundenname</th>
-                </tr>
-                <tr>
-                  <td><%=@project.customer.name%></td>
-                </tr>
-                <tr>
-                  <th>Kundennummer-SAP</th>
-                </tr>
-                <tr>
-                  <td><%=@project.customer.customer_id_sap%></td>
-                </tr>
-                <tr>
-                  <th>Kundennummer Beschreibung</th>
-                </tr>
-                <tr>
-                  <td><%=simple_format(@project.customer.description)%></td>
-                </tr>
-              <% elsif @project.component.present? %>
-                <tr>
-                  <th>Bauteilnummer</th>
-                </tr>
-                <tr>
-                  <td>
-                    <%= link_to component_path(@project.component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Bauteil " + @project.component.name do %>
-                      <%=@project.component.id%>
-                    <% end %>
-                  </td>
-                </tr>
-                <tr>
-                  <th>Bezeichnung</th>
-                </tr>
-                <tr>
-                  <td><%=@project.component.name%></td>
-                </tr>
-                <tr>
-                  <th>Bauteilnummer-SAP</th>
-                </tr>
-                <tr>
-                  <td><%=@project.component.component_id_sap%></td>
-                </tr>
-                <tr>
-                  <th>Bauteil Beschreibung</th>
-                </tr>
-                <tr>
-                  <td><%=simple_format(@project.component.description)%></td>
-                </tr>
+                <li role="presentation" class="active"><a href="#customer" aria-controls="customer" role="tab" data-toggle="tab">Kunde</a></li>
               <% end %>
-            </table>
-          <% end %>
+              <% if @project.component.present? %>
+                <% if @project.customer.blank? %>
+                  <li role="presentation" class="active"><a href="#component" aria-controls="component" role="tab" data-toggle="tab">Artikel</a></li>
+                <% else %>
+                  <li role="presentation"><a href="#component" aria-controls="component" role="tab" data-toggle="tab">Artikel</a></li>
+                <% end %>
+              <% end %>
+            </ul>
+            <div class="tab-content">
+              <% if @project.customer.present?%>
+                <div role="tabpanel" class="tab-pane active" id="customer">
+                  <table class="table table-hover">
+                    <tr>
+                    <th>Kundennummer</th>
+                  </tr>
+                  <tr>
+                    <td>
+                       <%= link_to customer_path(@project.customer), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Kunden " + @project.customer.name do %>
+                        <%=@project.customer.id%>
+                      <% end %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Kundenname</th>
+                  </tr>
+                  <tr>
+                    <td><%=@project.customer.name%></td>
+                  </tr>
+                  <tr>
+                    <th>Kundennummer-SAP</th>
+                  </tr>
+                  <tr>
+                    <td><%=@project.customer.customer_id_sap%></td>
+                  </tr>
+                  <tr>
+                    <th>Kundennummer Beschreibung</th>
+                  </tr>
+                  <tr>
+                    <td><%=simple_format(@project.customer.description)%></td>
+                  </tr>
+                  </table>
+                </div>
+              <% end %>
+              <% if @project.component.present? %>
+                <% if @project.customer.blank? %>
+                  <div role="tabpanel" class="tab-pane active" id="component">
+                <% else %>
+                  <div role="tabpanel" class="tab-pane" id="component">
+                <% end %>
+                  <table class="table table-hover">
+                    <tr>
+                      <th>Bauteilnummer</th>
+                    </tr>
+                    <tr>
+                      <td>
+                        <%= link_to component_path(@project.component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Bauteil " + @project.component.name do %>
+                          <%=@project.component.id%>
+                        <% end %>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Bezeichnung</th>
+                    </tr>
+                    <tr>
+                      <td><%=@project.component.name%></td>
+                    </tr>
+                    <tr>
+                      <th>Bauteilnummer-SAP</th>
+                    </tr>
+                    <tr>
+                      <td><%=@project.component.component_id_sap%></td>
+                    </tr>
+                    <tr>
+                      <th>Bauteil Beschreibung</th>
+                    </tr>
+                    <tr>
+                      <td><%=simple_format(@project.component.description)%></td>
+                    </tr>
+                  </table>
+                </div>
+              <% end %>
+
+            </div>
+          <%end%>
         </div>
       </div>
 
@@ -146,38 +182,118 @@
           <div class="panel-heading">
             <h3 class="panel-title">Hochgeladene Dateien</h3>
           </div>
-          <% if @files.blank? %>
-              Keine Dateien gefunden!
-          <% else %>
-              <table class="table table-hover">
-                <tr>
-                  <th>Dateiname</th>
-                  <th>Dateityp</th>
-                  <th>Hochgeladen von</th>
-                  <th colspan="2">Hochgeladen am</th>
-                </tr>
-                <% @files.each do |file| %>
-                  <tr>
-                    <td>
-                      <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
-                      <%=file.file_file_name%>
-                      <% end %>
-                    </td>
-                    <td><%=file.file_content_type%></td>
-                    <td><%=file.user.first_name%> <%=file.user.last_name%></td>
-                    <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
-                    <td>
-                      <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                      <%end%>
-                    </td>
-                  </tr>
-                <%end%>
-              </table>
-              <% if @files.count/10 > 1 %>
-                <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'filepage' %>
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#projectfiles" aria-controls="project" role="tab" data-toggle="tab">Projekt</a></li>
+              <% if !@customerfiles.blank? %>
+                <li role="presentation"><a href="#customerfiles" aria-controls="customerfiles" role="tab" data-toggle="tab">Kunde</a></li>
               <% end %>
-          <% end %>
+              <% if !@componentfiles.blank? %>
+                <li role="presentation"><a href="#componentfiles" aria-controls="componentfiles" role="tab" data-toggle="tab">Artikel</a></li>
+              <% end %>
+            </ul>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="projectfiles">
+              <% if @files.blank? %>
+                  Keine Dateien gefunden!
+              <% else %>
+                  <table class="table table-hover">
+                    <tr>
+                      <th>Dateiname</th>
+                      <th>Dateityp</th>
+                      <th>Hochgeladen von</th>
+                      <th colspan="2">Hochgeladen am</th>
+                    </tr>
+                    <% @files.each do |file| %>
+                      <tr>
+                        <td>
+                          <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                          <%=file.file_file_name%>
+                          <% end %>
+                        </td>
+                        <td><%=file.file_content_type%></td>
+                        <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                        <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                        <td>
+                          <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <%end%>
+                  </table>
+                  <% if @files.count/10 > 1 %>
+                    <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'filepage' %>
+                  <% end %>
+              <% end %>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="customerfiles">
+              <% if @customerfiles.blank? %>
+                  Keine Dateien gefunden!
+              <% else %>
+                  <table class="table table-hover">
+                    <tr>
+                      <th>Dateiname</th>
+                      <th>Dateityp</th>
+                      <th>Hochgeladen von</th>
+                      <th colspan="2">Hochgeladen am</th>
+                    </tr>
+                    <% @customerfiles.each do |file| %>
+                      <tr>
+                        <td>
+                          <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                          <%=file.file_file_name%>
+                          <% end %>
+                        </td>
+                        <td><%=file.file_content_type%></td>
+                        <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                        <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                        <td>
+                          <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <%end%>
+                  </table>
+                  <% if @files.count/10 > 1 %>
+                    <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'customerfilepage' %>
+                  <% end %>
+              <% end %>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="componentfiles">
+              <% if @componentfiles.blank? %>
+                  Keine Dateien gefunden!
+              <% else %>
+                  <table class="table table-hover">
+                    <tr>
+                      <th>Dateiname</th>
+                      <th>Dateityp</th>
+                      <th>Hochgeladen von</th>
+                      <th colspan="2">Hochgeladen am</th>
+                    </tr>
+                    <% @componentfiles.each do |file| %>
+                      <tr>
+                        <td>
+                          <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                          <%=file.file_file_name%>
+                          <% end %>
+                        </td>
+                        <td><%=file.file_content_type%></td>
+                        <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                        <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                        <td>
+                          <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <%end%>
+                  </table>
+                  <% if @files.count/10 > 1 %>
+                    <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'componentfilepage' %>
+                  <% end %>
+              <% end %>
+            </div>
         </div>
       </div>
     </div>

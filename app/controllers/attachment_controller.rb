@@ -79,20 +79,11 @@ class AttachmentController < ApplicationController
       @path = task_path(@attachment.task)
     end
 
-      @attachment.destroy
-      respond_to do |format|
-        format.html { redirect_to @path, success: 'Datei wurde erfolgreich entfernt.' }
-        format.json { head :no_content }
-      end
-    if @attachment.customer.present?
-      @customer = @attachment.customer
-      @attachment.destroy
-      respond_to do |format|
-        format.html { redirect_to customer_path(@customer), success: 'Datei wurde erfolgreich entfernt.' }
-        format.json { head :no_content }
-      end
+    @attachment.destroy
+    respond_to do |format|
+      format.html { redirect_to @path, success: 'Datei wurde erfolgreich entfernt.' }
+      format.json { head :no_content }
     end
-
   end
 
   private

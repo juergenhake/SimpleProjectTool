@@ -93,17 +93,33 @@
             <tr>
               <td><%=simple_format(@item.project.description)%></td>
             </tr>
-             <tr>
-              <th>Reklamation Lieferant</th>
+            <% if @item.project.reklamation_lief.present? %>
+               <tr>
+                <th>Reklamation Lieferant</th>
+              </tr>
+              <tr>
+                <td><%=@item.project.reklamation_lief%></td>
+              </tr>
+            <% end %>
+            <% if @item.project.lief_nr.present? %>
+               <tr>
+                <th>Lieferscheinnummer</th>
+              </tr>
+              <tr>
+                <td><%=@item.project.lief_nr%></td>
+              </tr>
+            <% end %>
+            <tr>
+              <th> Fortschritt </th>
             </tr>
             <tr>
-              <td><%=@item.project.reklamation_lief%></td>
-            </tr>
-             <tr>
-              <th>Lieferscheinnummer</th>
-            </tr>
-            <tr>
-              <td><%=@item.project.lief_nr%></td>
+              <td>
+                <div class="progress">
+                  <div class="progress-bar" role="progressbar" aria-valuenow="<%=@item.project.progress%>" aria-valuemin="0" aria-valuemax="100" style="width: <%=@item.project.progress%>%;">
+                    <%=@item.project.progress%>%
+                  </div>
+                </div>
+              </td>
             </tr>
           </table>
         </div>
@@ -112,40 +128,157 @@
       <div class="col-md-6">
         <div class="panel panel-primary">
           <div class="panel-heading">
-            <h3 class="panel-title">Hochgeladene Dateien zur Aufgabe</h3>
+            <h3 class="panel-title">Hochgeladene Dateien</h3>
           </div>
-          <% if @files.blank? %>
-              Keine Dateien gefunden!
-          <% else %>
-              <table class="table table-hover">
-                <tr>
-                  <th>Dateiname</th>
-                  <th>Dateityp</th>
-                  <th>Hochgeladen von</th>
-                  <th colspan="2">Hochgeladen am</th>
-                </tr>
-                <% @files.each do |file| %>
-                  <tr>
-                    <td>
-                      <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
-                      <%=file.file_file_name%>
-                      <% end %>
-                    </td>
-                    <td><%=file.file_content_type%></td>
-                    <td><%=file.user.first_name%> <%=file.user.last_name%></td>
-                    <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
-                    <td>
-                      <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
-                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                      <%end%>
-                    </td>
-                  </tr>
-                <%end%>
-              </table>
-              <% if @files.count/10 > 1 %>
-                <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'filepage' %>
+           <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#taskfiles" aria-controls="taskfiles" role="tab" data-toggle="tab">Aufgabe</a></li>
+               <% if !@projectfiles.blank? %>
+                <li role="presentation"><a href="#projectfiles" aria-controls="projectfiles" role="tab" data-toggle="tab">Projekt</a></li>
               <% end %>
-          <% end %>
+              <% if !@customerfiles.blank? %>
+                <li role="presentation"><a href="#customerfiles" aria-controls="customerfiles" role="tab" data-toggle="tab">Kunde</a></li>
+              <% end %>
+              <% if !@componentfiles.blank? %>
+                <li role="presentation"><a href="#componentfiles" aria-controls="componentfiles" role="tab" data-toggle="tab">Artikel</a></li>
+              <% end %>
+            </ul>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="taskfiles">
+              <% if @files.blank? %>
+                  Keine Dateien gefunden!
+              <% else %>
+                  <table class="table table-hover">
+                    <tr>
+                      <th>Dateiname</th>
+                      <th>Dateityp</th>
+                      <th>Hochgeladen von</th>
+                      <th colspan="2">Hochgeladen am</th>
+                    </tr>
+                    <% @files.each do |file| %>
+                      <tr>
+                        <td>
+                          <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                          <%=file.file_file_name%>
+                          <% end %>
+                        </td>
+                        <td><%=file.file_content_type%></td>
+                        <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                        <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                        <td>
+                          <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <%end%>
+                  </table>
+                  <% if @files.count/10 > 1 %>
+                    <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'filepage' %>
+                  <% end %>
+              <% end %>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="projectfiles">
+              <% if @projectfiles.blank? %>
+                  Keine Dateien gefunden!
+              <% else %>
+                  <table class="table table-hover">
+                    <tr>
+                      <th>Dateiname</th>
+                      <th>Dateityp</th>
+                      <th>Hochgeladen von</th>
+                      <th colspan="2">Hochgeladen am</th>
+                    </tr>
+                    <% @projectfiles.each do |file| %>
+                      <tr>
+                        <td>
+                          <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                          <%=file.file_file_name%>
+                          <% end %>
+                        </td>
+                        <td><%=file.file_content_type%></td>
+                        <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                        <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                        <td>
+                          <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <%end%>
+                  </table>
+                  <% if @projectfiles.count/10 > 1 %>
+                    <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'filepage' %>
+                  <% end %>
+              <% end %>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="customerfiles">
+              <% if @customerfiles.blank? %>
+                  Keine Dateien gefunden!
+              <% else %>
+                  <table class="table table-hover">
+                    <tr>
+                      <th>Dateiname</th>
+                      <th>Dateityp</th>
+                      <th>Hochgeladen von</th>
+                      <th colspan="2">Hochgeladen am</th>
+                    </tr>
+                    <% @customerfiles.each do |file| %>
+                      <tr>
+                        <td>
+                          <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                          <%=file.file_file_name%>
+                          <% end %>
+                        </td>
+                        <td><%=file.file_content_type%></td>
+                        <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                        <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                        <td>
+                          <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <%end%>
+                  </table>
+                  <% if @customerfiles.count/10 > 1 %>
+                    <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'customerfilepage' %>
+                  <% end %>
+              <% end %>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="componentfiles">
+              <% if @componentfiles.blank? %>
+                  Keine Dateien gefunden!
+              <% else %>
+                  <table class="table table-hover">
+                    <tr>
+                      <th>Dateiname</th>
+                      <th>Dateityp</th>
+                      <th>Hochgeladen von</th>
+                      <th colspan="2">Hochgeladen am</th>
+                    </tr>
+                    <% @componentfiles.each do |file| %>
+                      <tr>
+                        <td>
+                          <%= link_to file.file.url(:original, false),  target: "_blank", 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei öffnen" do %>
+                          <%=file.file_file_name%>
+                          <% end %>
+                        </td>
+                        <td><%=file.file_content_type%></td>
+                        <td><%=file.user.first_name%> <%=file.user.last_name%></td>
+                        <td><%=file.file_updated_at.strftime("%d.%m.%Y %H:%M:%S")%></td>
+                        <td>
+                          <%= link_to attachment_path(file), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Datei löschen" do %>
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                          <%end%>
+                        </td>
+                      </tr>
+                    <%end%>
+                  </table>
+                  <% if @componentfiles.count/10 > 1 %>
+                    <%= will_paginate @files, renderer: BootstrapPagination::Rails, :param_name => 'componentfilepage' %>
+                  <% end %>
+              <% end %>
+            </div>
         </div>
       </div>
     </div>

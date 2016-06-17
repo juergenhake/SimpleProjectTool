@@ -12,14 +12,20 @@ class ProjectController < ApplicationController
     @newFile = Attachment.new
     @newItem = Task.new
     @files = @project.attachments.paginate(:page => params[:filepage])
+    if @project.customer.present?
+      @customerfiles = @project.customer.attachments.paginate(:page => params[:customerfilepage])
+    end
+    if @project.component.present?
+      @componentfiles = @project.component.attachments.paginate(:page => params[:componentfilepage])
+    end
   end
 
   def create
     @project = Project.new(project_params)
 
-    case project_params[:type]
-    when "Sonstige"
-      @project.Sonstige!
+    if project_params[:type] != "Reklamation"
+      @project.customer = nil
+      @project.title = "In der If drin gewesen!"
     end
 
     respond_to do |format|
@@ -60,7 +66,7 @@ class ProjectController < ApplicationController
   private
 
   def project_params
-    params.require(:project).permit(:title, :description, :customer_id, :component_id, :user_id, :lief_nr, :reklamation_lief)
+    params.require(:project).permit(:title, :description, :customer_id, :component_id, :user_id, :lief_nr, :reklamation_lief, :type)
   end
 
   def find_project

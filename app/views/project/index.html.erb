@@ -2,14 +2,6 @@
 <div class="page-header">
   <h1>Alle Projekte</h1>
 </div>
-<div class="row">
-  <div class="col-md-12", align="right">
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newProject">
-      Neues Projekt
-    </button>
-    <br>
-  </div>
-</div>
 <br>
 <div class="row">
     <div class="col-md-12">
@@ -33,22 +25,27 @@
               </td>
               <td><%=project.title%></td>
               <td><%=project.description%></td>
-              <% if project.customer.present? %>
+               <% if project.customer.present? || project.component.present? %>
                 <td>
-                  <%= link_to customer_path(project.customer), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Kunden " + project.customer.name do %>
-                    K<%=project.customer.id%>
+                  <% if project.customer.present? %>
+
+                    <%= link_to customer_path(project.customer), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Kunden " + project.customer.name do %>
+                      K<%=project.customer.id%>
+                    <% end %>
                   <% end %>
-                </td>
-              <% elsif project.component.present? %>
-                <td>
-                  <%= link_to component_path(project.component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Bauteil " + project.component.name do %>
-                  B<%=project.component.id%>
+                  <% if project.customer.present? && project.component.present? %>
+                    /
+                  <% end %>
+                  <% if project.component.present? %>
+                    <%= link_to component_path(project.component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Zum Bauteil " + project.component.name do %>
+                      B<%=project.component.id%>
+                      <% end %>
                   <% end %>
                 </td>
               <% else %>
                 <td>ohne Zuordnung</td>
               <% end %>
-              <td><%=project.Sonstige?%></td>
+              <td><%=project.type%></td>
               <% if project.user.present? %>
                 <td><%=project.user.first_name%> <%=project.user.last_name%></td>
               <% else %>

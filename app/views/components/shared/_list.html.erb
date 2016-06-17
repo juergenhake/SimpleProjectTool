@@ -1,0 +1,28 @@
+<%# app/views/components/shared/_list.html.erb %>
+<div id="filterrific_results">
+  <table class="table table-hover">
+    <tr>
+      <th>#</th>
+      <th>SAP-Nummer</th>
+      <th>Bezeichnung</th>
+      <th>Beschreibung</th>
+      <th></th>
+    </tr>
+    <% components.each do |component| %>
+      <tr>
+        <td><%= link_to component_path(component), 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Bauteil öffnen" do %>
+          <%=component.id%><%end%></td>
+        <td><%=component.component_id_sap%></td>
+        <td><%=component.name%></td>
+        <td><%=component.description%></td>
+        <td>
+          <%= link_to component_path(component), method: :delete, 'data-toggle'=> "tooltip", 'data-placement' => "bottom", title: "Bauteil löschen" do %>
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+          <%end%>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+<%=will_paginate components %>
+
